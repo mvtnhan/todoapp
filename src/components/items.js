@@ -1,9 +1,9 @@
 import React from "react";
-import "../scss/item.scss";
+import "../scss/items.scss";
 
-export default function Item() {
+export default function Items() {
   return (
-    <div className="item">
+    <div className="items">
       <input className="toggle-all" type="checkbox" />
       <label for="toggle-all" />
       <ul className="todo-list">
