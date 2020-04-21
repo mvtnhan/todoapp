@@ -5,7 +5,7 @@
     display: block;
   }
 
-  .toggle-todo {
+  .toggle-todo-input {
     text-align: center;
     width: 40px;
     height: auto;
@@ -18,12 +18,12 @@
     appearance: none;
     opacity: 0;
 
-    &:checked + .content-todo {
+    &:checked + .todo-content {
       background-image: url(../images/checkbox-todo-active.svg);
     }
   }
 
-  .content-todo {
+  .todo-content {
     word-break: break-all;
     padding: 15px 15px 15px 60px;
     display: block;
@@ -32,13 +32,13 @@
     transition: color 0.4s;
   }
 
-  .toggle-todo + .content-todo {
+  .toggle-todo-input + .todo-content {
     background-image: url(../images/checkbox-todo.svg);
     background-repeat: no-repeat;
     background-position: center left;
   }
 
-  &.completed .content-todo {
+  &.completed .todo-content {
     color: #d9d9d9;
     text-decoration: line-through;
   }

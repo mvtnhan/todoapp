@@ -39,15 +39,15 @@
         margin: 3px;
         padding: 3px 7px;
         text-decoration: none;
-        border: 1px solid transparent;
+
         border-radius: 3px;
 
         &:hover {
-          border-color: rgba(175, 47, 47, 0.1);
+          border: 1px solid rgba(175, 47, 47, 0.1);
         }
 
         .selected {
-          border-color: rgba(175, 47, 47, 0.2);
+          border: 1px solid rgba(175, 47, 47, 0.2);
         }
       }
     }

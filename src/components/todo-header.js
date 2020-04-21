@@ -6,7 +6,7 @@ export default function Header() {
     <div className="header">
       <input className="toggle-all" type="checkbox" />
       <input
-        className="new-todo"
+        className="new-todo-input"
         type="text"
         placeholder="What needs to be done?"
       />
