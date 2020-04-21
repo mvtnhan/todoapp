@@ -1,0 +1,63 @@
+.header {
+  input[type="checkbox"] {
+    outline: none;
+  }
+
+  .toggle-all {
+    transform: rotate(90deg);
+    position: absolute;
+    top: 14px;
+    left: -15px;
+    width: 60px;
+    height: 34px;
+    text-align: center;
+    border: none;
+    -webkit-appearance: none;
+
+    &:before {
+      content: "\276F";
+      font-size: 22px;
+      color: #e6e6e6;
+      padding: 10px 27px 10px 27px;
+    }
+
+    &:checked::before {
+      color: black;
+    }
+  }
+
+  .new-todo {
+    position: relative;
+    margin: 0;
+    width: 100%;
+    font-size: 24px;
+    font-family: inherit;
+    font-weight: inherit;
+    line-height: 1.4em;
+    color: inherit;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    padding: 16px 16px 16px 60px;
+    border: none;
+    background: rgba(0, 0, 0, 0.003);
+    box-shadow: inset 0 -2px 1px rgba(155, 126, 126, 0.03);
+
+    &::-webkit-input-placeholder {
+      font-style: italic;
+      font-weight: 300;
+      color: #e6e6e6;
+    }
+
+    &::-moz-placeholder {
+      font-style: italic;
+      font-weight: 300;
+      color: #e6e6e6;
+    }
+
+    &::input-placeholder {
+      font-style: italic;
+      font-weight: 300;
+      color: #e6e6e6;
+    }
+  }
+}

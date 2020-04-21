@@ -1,15 +1,19 @@
 import React from "react";
-import "./App.css";
+import "./scss/reset.scss";
+import "./App.scss";
 
-import TodoHeader from "./components/header.js";
-import TodoItems from "./components/items.js";
-import TodoFooter from "./components/footer.js";
+import TodoHeader from "./components/todo-header.js";
+import TodoItem from "./components/todo-item.js";
+import TodoItem2 from "./components/todo-item.js";
+import TodoFooter from "./components/todo-footer.js";
 
 function App() {
   return (
     <div className="todo">
+      <h1 className="title">Todos</h1>
       {TodoHeader()}
-      {TodoItems()}
+      {TodoItem()}
+      {TodoItem2()}
       {TodoFooter()}
     </div>
   );

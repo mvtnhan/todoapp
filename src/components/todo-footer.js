@@ -1,5 +1,5 @@
 import React from "react";
-import "../scss/footer.scss";
+import "./todo-footer.scss";
 
 export default function Footer() {
   let num = 0;
