@@ -1,12 +1,14 @@
 import React from "react";
 import "./todo-footer.scss";
 
-export default function Footer() {
-  let num = 0;
-  let items = "item";
+const TodoFooter = (props) => {
+  const { todos, clearComplected } = props;
+  const count = todos.length;
+  const items = count > 1 ? "items" : "item";
+  console.log(items);
   return (
     <div className="footer">
-      <span className="todo-count">{`${num} ${items} left`}</span>
+      <span className="todo-count">{`${count} ${items} left`}</span>
       <ul className="filters">
         <li>
           <a href="#/">All</a>
@@ -18,7 +20,16 @@ export default function Footer() {
           <a href="#/completed">Complected</a>
         </li>
       </ul>
-      <button className="clear-completed">Clear completed</button>
+      <button
+        className="clear-completed"
+        onClick={() => {
+          alert("hek");
+        }}
+      >
+        Clear completed 1
+      </button>
     </div>
   );
-}
+};
+
+export default TodoFooter;
