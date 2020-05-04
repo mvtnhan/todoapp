@@ -60,10 +60,6 @@
     text-decoration: none;
     cursor: pointer;
 
-    &:active {
-      display: none;
-    }
-
     &:hover {
       text-decoration: underline;
     }

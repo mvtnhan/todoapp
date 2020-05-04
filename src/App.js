@@ -8,11 +8,8 @@ import TodoList from "./components/todo-list";
 
 class App extends React.Component {
   state = {
-    todos: [
-      { content: "one", done: false, id: 1 },
-      { content: "true", done: false, id: 2 },
-      { content: "three", done: false, id: 3 },
-    ],
+    todos: [{ content: "asdas", done: false, id: 1 }],
+    status: "ALL",
   };
 
   addTodo = (todo) => {
@@ -47,28 +44,60 @@ class App extends React.Component {
     });
   };
 
+  footerAll = () => {
+    this.setState({
+      status: "ALL",
+    });
+  };
+
+  footerActive = () => {
+    this.setState({
+      status: "ACTIVE",
+    });
+  };
+
+  footerComplected = () => {
+    this.setState({
+      status: "COMPLECTED",
+    });
+  };
+
   clearComplected = () => {
-    console.log("aas");
+    const todos = this.state.todos.filter((todo) => {
+      return todo.done !== true;
+    });
+    this.setState({
+      todos,
+    });
   };
 
   render() {
+    let newtodos = this.state.todos;
+    if (this.state.status === "ACTIVE") {
+      newtodos = this.state.todos.filter((todo) => {
+        return todo.done === false;
+      });
+    } else if (this.state.status === "COMPLECTED") {
+      newtodos = this.state.todos.filter((todo) => {
+        return todo.done === true;
+      });
+    }
     return (
       <div className="todo">
         <h1 className="title">Todos</h1>
-        <button className="clear-completed" onClick={() => {}}>
-          Clear completed 1
-        </button>
-        {/* <TodoHeader addTodo={this.addTodo} />
+        <TodoHeader addTodo={this.addTodo} />
         <TodoList
-          todos={this.state.todos}
+          todos={newtodos}
           deleteTodo={this.deleteTodo}
           toggleTodo={this.toggleTodo}
-        /> */}
-
+        />
         <TodoFooter
           todos={this.state.todos}
-
-          // clearComplected={this.clearComplected}
+          todoscount={this.state.todos.filter((todo) => !todo.done)}
+          footerAll={this.footerAll}
+          footerActive={this.footerActive}
+          footerComplected={this.footerComplected}
+          clearComplected={this.clearComplected}
         />
       </div>
     );
@@ -76,33 +105,3 @@ class App extends React.Component {
 }
 
 export default App;
-{
-  /* {this.state.todos.map((todo) => {
-          return (
-            <TodoItem
-              todo={todo}
-              deleteTodo={this.deleteTodo}
-              toggleTodo={this.toggleTodo}
-            />
-          );
-        })} */
-}
-
-// const todoitem = this.state.todos.length
-//   ? this.state.todos.map((todo) => {
-//       return (
-//         <TodoItem
-//           todo={todo}
-//           deleteTodo={this.deleteTodo}
-//           toggleTodo={this.toggleTodo}
-//         />
-//       );
-//     })
-//   : null;
-
-// const todos = this.state.todos.filter((todo) => {
-//   return todo.done !== true;
-// });
-// this.setState({
-//   todos,
-// });
