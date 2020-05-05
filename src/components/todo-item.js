@@ -1,27 +1,59 @@
 import React from "react";
 import "./todo-item.scss";
 
-const TodoItem = (props) => {
-  const { todo, deleteTodo, toggleTodo } = props;
-  const checkedTodo = todo.done ? true : false;
-  return (
-    <div className="todo-item" key={todo.id}>
-      <input
-        className="toggle-todo-input"
-        type="checkbox"
-        onChange={() => {
-          toggleTodo(todo.id);
-        }}
-        checked={checkedTodo}
-      />
-      <label className="todo-content">{todo.content}</label>
-      <button
-        className="delete-btn"
-        onClick={() => {
-          deleteTodo(todo.id);
-        }}
-      ></button>
-    </div>
-  );
-};
+class TodoItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      editting: false,
+    };
+  }
+  showInput = () => {
+    const showedit = !this.state.editting;
+    this.setState({
+      editting: showedit,
+    });
+  };
+
+  render() {
+    return (
+      <div className="todo-item" key={this.props.todo.id}>
+        <input
+          className="toggle-todo-input"
+          type="checkbox"
+          onChange={() => {
+            this.props.toggleTodo(this.props.todo.id);
+          }}
+          checked={this.props.todo.done}
+        />
+        <label className="todo-content" onDoubleClick={this.showInput}>
+          {this.state.editting ? (
+            <input
+              className="edit-todo"
+              type="edit"
+              value={this.props.todo.content}
+              key={this.props.todo.id}
+              onBlur={this.showInput}
+              onChange={(e) => {
+                this.props.editTodo(e.target.value, this.props.todo.id);
+              }}
+            />
+          ) : (
+            this.props.todo.content
+          )}
+        </label>
+
+        {this.state.editting === false ? (
+          <button
+            className="delete-btn"
+            onClick={() => {
+              this.props.deleteTodo(this.props.todo.id);
+            }}
+          />
+        ) : null}
+      </div>
+    );
+  }
+}
+
 export default TodoItem;

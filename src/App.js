@@ -8,7 +8,7 @@ import TodoList from "./components/todo-list";
 
 class App extends React.Component {
   state = {
-    todos: [{ content: "asdas", done: false, id: 1 }],
+    todos: [],
     status: "ALL",
   };
 
@@ -26,6 +26,21 @@ class App extends React.Component {
         return {
           ...todo,
           done: !todo.done,
+        };
+      }
+      return todo;
+    });
+    this.setState({
+      todos,
+    });
+  };
+
+  editTodo = (content, id) => {
+    const todos = this.state.todos.map((todo) => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          content: content,
         };
       }
       return todo;
@@ -90,14 +105,14 @@ class App extends React.Component {
           todos={newtodos}
           deleteTodo={this.deleteTodo}
           toggleTodo={this.toggleTodo}
+          editTodo={this.editTodo}
         />
         <TodoFooter
           todos={this.state.todos}
-          todoscount={this.state.todos.filter((todo) => !todo.done)}
           footerAll={this.footerAll}
           footerActive={this.footerActive}
-          footerComplected={this.footerComplected}
-          clearComplected={this.clearComplected}
+          footerCompleted={this.footerComplected}
+          clearCompleted={this.clearComplected}
         />
       </div>
     );

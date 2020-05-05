@@ -7,13 +7,13 @@
     transform: rotate(90deg);
     position: absolute;
     top: 14px;
-    left: -15px;
+    left: -10px;
     width: 60px;
     height: 34px;
     text-align: center;
     border: none;
     -webkit-appearance: none;
-
+    cursor: pointer;
     &:before {
       content: "\276F";
       font-size: 22px;

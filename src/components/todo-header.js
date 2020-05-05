@@ -20,11 +20,20 @@ class TodoHeader extends React.Component {
       content: "",
     });
   };
+
+  toggleAll = () => {
+    alert("có gì hot ko");
+  };
+
   render() {
     return (
       <div className="header">
         <form onSubmit={this.handleSubmit}>
-          <input className="toggle-all" type="checkbox" />
+          <input
+            className="toggle-all"
+            type="checkbox"
+            onClick={this.toggleAll}
+          ></input>
           <input
             className="new-todo-input"
             type="text"

@@ -27,12 +27,22 @@
   }
 
   .todo-content {
-    word-break: break-all;
     padding: 15px 15px 15px 60px;
     display: block;
     font-size: 24px;
     line-height: 1.2;
     transition: color 0.4s;
+    .edit-todo {
+      padding: 15px 15px 15px 15px;
+      width: 100%;
+      border: 1px solid #999;
+      font-size: 24px;
+      line-height: 1.2;
+      box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+      box-sizing: border-box;
+
+      margin: 0;
+    }
   }
 
   .toggle-todo-input + .todo-content {

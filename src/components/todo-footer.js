@@ -4,21 +4,18 @@ import "./todo-footer.scss";
 const TodoFooter = (props) => {
   const {
     todos,
-    todoscount,
-    clearComplected,
+    clearCompleted,
     footerActive,
     footerAll,
-    footerComplected,
+    footerCompleted,
   } = props;
-  const countleft = todoscount.length;
-  const countcomplect = todos.length;
-  const items = countleft > 1 ? "items" : "item";
-  const clearcomplected =
-    countcomplect - countleft > 0 ? "clear complected" : "";
+  const unfinishedItemsCount = todos.filter((todo) => !todo.done).length;
+  const itemText = unfinishedItemsCount > 1 ? "items" : "item";
+  const haveCompletedItem = todos.length - unfinishedItemsCount > 0;
 
   return (
     <div className="footer">
-      <span className="todo-count">{`${countleft} ${items} left`}</span>
+      <span className="todo-count">{`${unfinishedItemsCount} ${itemText} left`}</span>
       <ul className="filters">
         <li>
           <a
@@ -44,20 +41,20 @@ const TodoFooter = (props) => {
           <a
             href="#/completed"
             onClick={() => {
-              footerComplected();
+              footerCompleted();
             }}
           >
-            Complected
+            Completed
           </a>
         </li>
       </ul>
       <button
         className="clear-completed"
         onClick={() => {
-          clearComplected();
+          clearCompleted();
         }}
       >
-        {`${clearcomplected}`}
+        {haveCompletedItem ? "clear completed" : ""}
       </button>
     </div>
   );
