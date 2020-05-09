@@ -13,76 +13,116 @@ class App extends React.Component {
   };
 
   addTodo = (todo) => {
-    todo.id = this.state.todos.length + 1;
-    let todos = [...this.state.todos, todo];
     this.setState({
-      todos,
+      todos: [
+        ...this.state.todos,
+        { ...todo, id: this.state.todos.length + 1 },
+      ],
+    });
+  };
+
+  toggleAll = () => {
+    const { todos } = this.state;
+    const counttoggle = todos.filter((todo) => todo.done).length;
+    // if (counttoggle === todos.length) {
+    //   this.setState({
+    //     todos: todos.map((todo) => ({
+    //       ...todo,
+    //       done: false,
+    //     })),
+    //   });
+    // } else {
+    //   this.setState({
+    //     todos: todos.map((todo) => ({
+    //       ...todo,
+    //       done: true,
+    //     })),
+    //   });
+    // }
+    this.setState({
+      todos: todos.map((todo) => ({
+        ...todo,
+        done: counttoggle !== todos.length,
+      })),
     });
   };
 
   toggleTodo = (id) => {
-    const todos = this.state.todos.map((todo) => {
-      if (todo.id === id) {
-        return {
-          ...todo,
-          done: !todo.done,
-        };
-      }
-      return todo;
-    });
+    //const todos = this.state.todos.map((todo) => {
+    //   if (todo.id === id) {
+    //     return {
+    //       ...todo,
+    //       done: !todo.done ,
+    //     };
+    //   }
+    //   return todo;
+    // });
     this.setState({
-      todos,
+      todos: this.state.todos.map((todo) => ({
+        ...todo,
+        done: todo.id === id ? !todo.done : todo.done,
+      })),
     });
   };
 
   editTodo = (content, id) => {
-    const todos = this.state.todos.map((todo) => {
-      if (todo.id === id) {
-        return {
-          ...todo,
-          content: content,
-        };
-      }
-      return todo;
-    });
+    // const todos = this.state.todos.map((todo) => {
+    //   if (todo.id === id) {
+    //     return {
+    //       ...todo,
+    //       content: content,
+    //     };
+    //   }
+    //   return todo;
+    // });
     this.setState({
-      todos,
+      todos: this.state.todos.map((todo) => ({
+        ...todo,
+        content: todo.id === id ? content : todo.content,
+      })),
     });
   };
+  // const counttoggle = todos.filter((todo) => todo.done).length;
 
   deleteTodo = (id) => {
-    const todos = this.state.todos.filter((todo) => {
-      return todo.id !== id;
-    });
+    // const todos = this.state.todos.filter((todo) => {
+    //   return todo.id !== id;
+    // });
     this.setState({
-      todos,
+      todos: this.state.todos.filter((todo) => todo.id !== id),
     });
   };
 
-  footerAll = () => {
+  updateStatus = (status) => {
     this.setState({
-      status: "ALL",
+      status: status,
     });
   };
 
-  footerActive = () => {
-    this.setState({
-      status: "ACTIVE",
-    });
-  };
+  // footerAll = () => {
+  //   this.setState({
+  //     status: "ALL",
+  //   });
+  // };
 
-  footerComplected = () => {
-    this.setState({
-      status: "COMPLECTED",
-    });
-  };
+  // footerActive = () => {
+  //   this.setState({
+  //     status: "ACTIVE",
+  //   });
+  // };
 
-  clearComplected = () => {
-    const todos = this.state.todos.filter((todo) => {
-      return todo.done !== true;
-    });
+  // footerCompleted = () => {
+  //   this.setState({
+  //     status: "COMPLETED",
+  //   });
+  // };
+
+  clearCompleted = () => {
+    // const todos = this.state.todos.filter((todo) => {
+    //   return todo.done !== true;
+    // });
     this.setState({
-      todos,
+      todos: this.state.todos.filter((todo) => todo.done !== true),
     });
   };
 
@@ -92,15 +132,20 @@ class App extends React.Component {
       newtodos = this.state.todos.filter((todo) => {
         return todo.done === false;
       });
-    } else if (this.state.status === "COMPLECTED") {
+    } else if (this.state.status === "COMPLETED") {
       newtodos = this.state.todos.filter((todo) => {
         return todo.done === true;
       });
     }
+
     return (
       <div className="todo">
         <h1 className="title">Todos</h1>
-        <TodoHeader addTodo={this.addTodo} />
+        <TodoHeader
+          todo={this.state.todos}
+          addTodo={this.addTodo}
+          toggleAll={this.toggleAll}
+        />
         <TodoList
           todos={newtodos}
           deleteTodo={this.deleteTodo}
@@ -109,10 +154,11 @@ class App extends React.Component {
         />
         <TodoFooter
           todos={this.state.todos}
-          footerAll={this.footerAll}
-          footerActive={this.footerActive}
-          footerCompleted={this.footerComplected}
-          clearCompleted={this.clearComplected}
+          updateStatus={this.updateStatus}
+          // footerAll={this.footerAll}
+          // footerActive={this.footerActive}
+          // footerCompleted={this.footerCompleted}
+          clearCompleted={this.clearCompleted}
         />
       </div>
     );

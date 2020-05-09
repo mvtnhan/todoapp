@@ -2,12 +2,10 @@ import React from "react";
 import "./todo-item.scss";
 
 class TodoItem extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      editting: false,
-    };
-  }
+  state = {
+    editting: false,
+  };
+
   showInput = () => {
     const showedit = !this.state.editting;
     this.setState({
@@ -26,22 +24,44 @@ class TodoItem extends React.Component {
           }}
           checked={this.props.todo.done}
         />
-        <label className="todo-content" onDoubleClick={this.showInput}>
-          {this.state.editting ? (
-            <input
-              className="edit-todo"
-              type="edit"
-              value={this.props.todo.content}
-              key={this.props.todo.id}
-              onBlur={this.showInput}
-              onChange={(e) => {
-                this.props.editTodo(e.target.value, this.props.todo.id);
-              }}
-            />
-          ) : (
-            this.props.todo.content
-          )}
-        </label>
+        {this.props.todo.done ? (
+          <label
+            className="todo-content ischecked"
+            onDoubleClick={this.showInput}
+          >
+            {this.state.editting ? (
+              <input
+                className="edit-todo"
+                type="edit"
+                value={this.props.todo.content}
+                key={this.props.todo.id}
+                onBlur={this.showInput}
+                onChange={(e) => {
+                  this.props.editTodo(e.target.value, this.props.todo.id);
+                }}
+              />
+            ) : (
+              this.props.todo.content
+            )}
+          </label>
+        ) : (
+          <label className="todo-content" onDoubleClick={this.showInput}>
+            {this.state.editting ? (
+              <input
+                className="edit-todo"
+                type="edit"
+                value={this.props.todo.content}
+                key={this.props.todo.id}
+                onBlur={this.showInput}
+                onChange={(e) => {
+                  this.props.editTodo(e.target.value, this.props.todo.id);
+                }}
+              />
+            ) : (
+              this.props.todo.content
+            )}
+          </label>
+        )}
 
         {this.state.editting === false ? (
           <button
