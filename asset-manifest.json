@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.db64a20a.chunk.css",
+    "main.js": "/static/js/main.8c91c5c8.chunk.js",
+    "main.js.map": "/static/js/main.8c91c5c8.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.0949d8ab.js",
+    "runtime-main.js.map": "/static/js/runtime-main.0949d8ab.js.map",
+    "static/js/2.6c94263a.chunk.js": "/static/js/2.6c94263a.chunk.js",
+    "static/js/2.6c94263a.chunk.js.map": "/static/js/2.6c94263a.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.36fd9ede7c69a919ff7c120053273c6e.js": "/precache-manifest.36fd9ede7c69a919ff7c120053273c6e.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.db64a20a.chunk.css.map": "/static/css/main.db64a20a.chunk.css.map",
+    "static/js/2.6c94263a.chunk.js.LICENSE.txt": "/static/js/2.6c94263a.chunk.js.LICENSE.txt",
+    "static/media/todo-item.scss": "/static/media/checkbox-todo.40e0f797.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.0949d8ab.js",
+    "static/js/2.6c94263a.chunk.js",
+    "static/css/main.db64a20a.chunk.css",
+    "static/js/main.8c91c5c8.chunk.js"
+  ]
+}
