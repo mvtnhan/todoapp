@@ -1,4 +1,6 @@
 .footer {
+  display: flex;
+  justify-content: space-between;
   color: #777;
   padding: 10px 15px;
   height: 20px;
@@ -19,7 +21,6 @@
   }
 
   .todo-count {
-    float: left;
     text-align: left;
   }
 
@@ -39,30 +40,25 @@
         margin: 3px;
         padding: 3px 7px;
         text-decoration: none;
-
         border-radius: 3px;
+        border: 1px solid transparent;
 
         &:hover {
           border: 1px solid rgba(175, 47, 47, 0.1);
         }
 
-        .selected {
-          border: 1px solid rgba(175, 47, 47, 0.2);
+        a.selected {
+          border-color: rgba(175, 47, 47, 0.2);
         }
       }
     }
   }
 
   .clear-completed {
-    float: right;
     position: relative;
     line-height: 20px;
     text-decoration: none;
     cursor: pointer;
-
-    &:active {
-      display: none;
-    }
 
     &:hover {
       text-decoration: underline;
