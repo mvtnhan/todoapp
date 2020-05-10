@@ -22,28 +22,16 @@ class TodoHeader extends React.Component {
   };
 
   render() {
-    const countToggle = this.props.todo.filter((todo) => todo.done).length;
-    const countTodo = this.props.todo.length;
-
     return (
       <div className="header">
         <form onSubmit={this.handleSubmit}>
-          {countTodo > 0 ? (
-            countToggle === countTodo ? (
-              <input
-                className="toggle-all"
-                type="checkbox"
-                onChange={this.props.toggleAll}
-                checked={countToggle === countTodo}
-              />
-            ) : (
-              <input
-                className="toggle-all"
-                type="checkbox"
-                onChange={this.props.toggleAll}
-              />
-            )
-          ) : null}
+          {!!this.props.todo.length && (
+            <input
+              className="toggle-all"
+              type="checkbox"
+              onChange={this.props.toggleAll}
+            />
+          )}
           <input
             className="new-todo-input"
             type="text"

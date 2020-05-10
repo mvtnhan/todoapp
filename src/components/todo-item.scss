@@ -23,6 +23,8 @@
 
     &:checked + .todo-content {
       background-image: url(../images/checkbox-todo-active.svg);
+      color: #d9d9d9;
+      text-decoration: line-through;
     }
   }
 
@@ -42,11 +44,6 @@
       box-sizing: border-box;
       margin: 0;
     }
-  }
-
-  .ischecked {
-    color: #d9d9d9;
-    text-decoration: line-through;
   }
 
   .toggle-todo-input + .todo-content {

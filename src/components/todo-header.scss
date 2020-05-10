@@ -27,8 +27,9 @@
       padding: 10px 27px 10px 27px;
     }
 
-    &:checked::before {
+    &:hover::before {
       color: black;
+      cursor: pointer;
     }
   }
 

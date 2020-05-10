@@ -1,6 +1,7 @@
 import React from "react";
 import "./scss/reset.scss";
 import "./App.scss";
+import { STATUS } from "./constant";
 
 import TodoHeader from "./components/todo-header.js";
 import TodoFooter from "./components/todo-footer.js";
@@ -24,21 +25,7 @@ class App extends React.Component {
   toggleAll = () => {
     const { todos } = this.state;
     const counttoggle = todos.filter((todo) => todo.done).length;
-    // if (counttoggle === todos.length) {
-    //   this.setState({
-    //     todos: todos.map((todo) => ({
-    //       ...todo,
-    //       done: false,
-    //     })),
-    //   });
-    // } else {
-    //   this.setState({
-    //     todos: todos.map((todo) => ({
-    //       ...todo,
-    //       done: true,
-    //     })),
-    //   });
-    // }
+
     this.setState({
       todos: todos.map((todo) => ({
         ...todo,
@@ -48,15 +35,6 @@ class App extends React.Component {
   };
 
   toggleTodo = (id) => {
-    //const todos = this.state.todos.map((todo) => {
-    //   if (todo.id === id) {
-    //     return {
-    //       ...todo,
-    //       done: !todo.done ,
-    //     };
-    //   }
-    //   return todo;
-    // });
     this.setState({
       todos: this.state.todos.map((todo) => ({
         ...todo,
@@ -66,15 +44,6 @@ class App extends React.Component {
   };
 
   editTodo = (content, id) => {
-    // const todos = this.state.todos.map((todo) => {
-    //   if (todo.id === id) {
-    //     return {
-    //       ...todo,
-    //       content: content,
-    //     };
-    //   }
-    //   return todo;
-    // });
     this.setState({
       todos: this.state.todos.map((todo) => ({
         ...todo,
@@ -82,12 +51,8 @@ class App extends React.Component {
       })),
     });
   };
-  // const counttoggle = todos.filter((todo) => todo.done).length;
 
   deleteTodo = (id) => {
-    // const todos = this.state.todos.filter((todo) => {
-    //   return todo.id !== id;
-    // });
     this.setState({
       todos: this.state.todos.filter((todo) => todo.id !== id),
     });
@@ -99,28 +64,7 @@ class App extends React.Component {
     });
   };
 
-  // footerAll = () => {
-  //   this.setState({
-  //     status: "ALL",
-  //   });
-  // };
-
-  // footerActive = () => {
-  //   this.setState({
-  //     status: "ACTIVE",
-  //   });
-  // };
-
-  // footerCompleted = () => {
-  //   this.setState({
-  //     status: "COMPLETED",
-  //   });
-  // };
-
   clearCompleted = () => {
-    // const todos = this.state.todos.filter((todo) => {
-    //   return todo.done !== true;
-    // });
     this.setState({
       todos: this.state.todos.filter((todo) => todo.done !== true),
     });
@@ -128,11 +72,11 @@ class App extends React.Component {
 
   render() {
     let newtodos = this.state.todos;
-    if (this.state.status === "ACTIVE") {
+    if (this.state.status === STATUS.ACTIVE) {
       newtodos = this.state.todos.filter((todo) => {
         return todo.done === false;
       });
-    } else if (this.state.status === "COMPLETED") {
+    } else if (this.state.status === STATUS.COMPLETED) {
       newtodos = this.state.todos.filter((todo) => {
         return todo.done === true;
       });
@@ -155,9 +99,6 @@ class App extends React.Component {
         <TodoFooter
           todos={this.state.todos}
           updateStatus={this.updateStatus}
-          // footerAll={this.footerAll}
-          // footerActive={this.footerActive}
-          // footerCompleted={this.footerCompleted}
           clearCompleted={this.clearCompleted}
         />
       </div>

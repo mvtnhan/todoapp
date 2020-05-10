@@ -2,18 +2,16 @@ import React from "react";
 import TodoItem from "./todo-item.js";
 
 const TodoList = (props) => {
-  const { todos, deleteTodo, toggleTodo, editTodo } = props;
   return (
     <div>
-      {todos.map((todo) => {
+      {props.todos.map((todo) => {
         return (
           <TodoItem
             key={todo.id}
             todo={todo}
-            deleteTodo={deleteTodo}
-            toggleTodo={toggleTodo}
-            editTodo={editTodo}
-            //{...props}
+            deleteTodo={props.deleteTodo}
+            toggleTodo={props.toggleTodo}
+            editTodo={props.editTodo}
           />
         );
       })}

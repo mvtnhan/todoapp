@@ -1,15 +1,10 @@
 import React from "react";
 import "./todo-footer.scss";
+import { STATUS } from "../constant";
+import { capitalize } from "../util";
 
 const TodoFooter = (props) => {
-  const {
-    todos,
-    updateStatus,
-    clearCompleted,
-    // footerActive,
-    // footerAll,
-    // footerCompleted,
-  } = props;
+  const { todos, updateStatus, clearCompleted } = props;
   const unfinishedItemsCount = todos.filter((todo) => !todo.done).length;
   const itemText = unfinishedItemsCount > 1 ? "items" : "item";
   const haveCompletedItem = todos.length - unfinishedItemsCount > 0;
@@ -20,36 +15,20 @@ const TodoFooter = (props) => {
         <div className="footer">
           <span className="todo-count">{`${unfinishedItemsCount} ${itemText} left`}</span>
           <ul className="filters">
-            <li>
-              <a
-                href="#/All"
-                onClick={() => {
-                  updateStatus("ALL");
-                }}
-              >
-                All
-              </a>
-            </li>
-            <li>
-              <a
-                href="#/Active"
-                onClick={() => {
-                  updateStatus("ACTIVE");
-                }}
-              >
-                Active
-              </a>
-            </li>
-            <li>
-              <a
-                href="#/completed"
-                onClick={() => {
-                  updateStatus("COMPLETED");
-                }}
-              >
-                Completed
-              </a>
-            </li>
+            {Object.keys(STATUS).map((statusKey) => {
+              return (
+                <li key={statusKey}>
+                  <a
+                    href="#/"
+                    onClick={() => {
+                      updateStatus(STATUS[statusKey]);
+                    }}
+                  >
+                    {capitalize(STATUS[statusKey])}
+                  </a>
+                </li>
+              );
+            })}
           </ul>
           <button
             className="clear-completed"
