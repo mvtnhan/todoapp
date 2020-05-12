@@ -8,8 +8,11 @@ import TodoFooter from "./components/todo-footer.js";
 import TodoList from "./components/todo-list";
 
 class App extends React.Component {
+  todosKey = "todosKey";
+  dataString = localStorage.getItem(this.todosKey);
+
   state = {
-    todos: [],
+    todos: this.dataString != null ? JSON.parse(this.dataString) : [],
     status: "ALL",
   };
 
@@ -71,6 +74,7 @@ class App extends React.Component {
   };
 
   render() {
+    localStorage.setItem(this.todosKey, JSON.stringify(this.state.todos));
     let newtodos = this.state.todos;
     if (this.state.status === STATUS.ACTIVE) {
       newtodos = this.state.todos.filter((todo) => {
