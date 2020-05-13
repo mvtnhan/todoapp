@@ -1,6 +1,5 @@
 import React from "react";
 import "./scss/reset.scss";
-// import "./App.scss";
 import { STATUS } from "./constant";
 import styled from "styled-components";
 
@@ -88,34 +87,32 @@ class App extends React.Component {
     }
 
     return (
-      <div>
-        <Todo>
-          <Title>Todos</Title>
-          <TodoHeader
-            todo={this.state.todos}
-            addTodo={this.addTodo}
-            toggleAll={this.toggleAll}
-          />
-          <TodoList
-            todos={newtodos}
-            deleteTodo={this.deleteTodo}
-            toggleTodo={this.toggleTodo}
-            editTodo={this.editTodo}
-          />
-          <TodoFooter
-            todos={this.state.todos}
-            updateStatus={this.updateStatus}
-            clearCompleted={this.clearCompleted}
-          />
-        </Todo>
-      </div>
+      <Wrapper>
+        <Title>Todos</Title>
+        <TodoHeader
+          todo={this.state.todos}
+          addTodo={this.addTodo}
+          toggleAll={this.toggleAll}
+        />
+        <TodoList
+          todos={newtodos}
+          deleteTodo={this.deleteTodo}
+          toggleTodo={this.toggleTodo}
+          editTodo={this.editTodo}
+        />
+        <TodoFooter
+          todos={this.state.todos}
+          updateStatus={this.updateStatus}
+          clearCompleted={this.clearCompleted}
+        />
+      </Wrapper>
     );
   }
 }
 
 export default App;
 
-const Todo = styled.div`
+const Wrapper = styled.div`
   background: #fff;
   margin: 130px 0 40px 0;
   position: relative;

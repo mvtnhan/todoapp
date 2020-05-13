@@ -23,22 +23,20 @@ class TodoHeader extends React.Component {
 
   render() {
     return (
-      <div>
-        <Header>
-          <form onSubmit={this.handleSubmit}>
-            {!!this.props.todo.length && (
-              <ToggleAll type="checkbox" onChange={this.props.toggleAll} />
-            )}
+      <Header>
+        <form onSubmit={this.handleSubmit}>
+          {!!this.props.todo.length && (
+            <ToggleAll type="checkbox" onChange={this.props.toggleAll} />
+          )}
 
-            <InputNewTodo
-              type="text"
-              placeholder="What needs to be done?"
-              value={this.state.content}
-              onChange={this.handleChange}
-            />
-          </form>
-        </Header>
-      </div>
+          <InputNewTodo
+            type="text"
+            placeholder="What needs to be done?"
+            value={this.state.content}
+            onChange={this.handleChange}
+          />
+        </form>
+      </Header>
     );
   }
 }

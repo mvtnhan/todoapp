@@ -19,41 +19,39 @@ class TodoItem extends React.Component {
     const { todo, toggleTodo, editTodo, deleteTodo } = this.props;
 
     return (
-      <div>
-        <Item key={todo.id}>
-          <ToggleTodo
-            type="checkbox"
-            onChange={() => {
-              toggleTodo(todo.id);
-            }}
-            checked={todo.done}
-          />
+      <Item key={todo.id}>
+        <ToggleTodo
+          type="checkbox"
+          onChange={() => {
+            toggleTodo(todo.id);
+          }}
+          checked={todo.done}
+        />
 
-          <TodoContent onDoubleClick={this.showInput}>
-            {this.state.editting ? (
-              <EditTodo
-                type="edit"
-                value={todo.content}
-                key={todo.id}
-                onBlur={this.showInput}
-                onChange={(e) => {
-                  editTodo(e.target.value, todo.id);
-                }}
-              />
-            ) : (
-              todo.content
-            )}
-          </TodoContent>
-
-          {!this.state.editting && (
-            <DeletedBtn
-              onClick={() => {
-                deleteTodo(todo.id);
+        <TodoContent onDoubleClick={this.showInput}>
+          {this.state.editting ? (
+            <EditTodo
+              type="edit"
+              value={todo.content}
+              key={todo.id}
+              onBlur={this.showInput}
+              onChange={(e) => {
+                editTodo(e.target.value, todo.id);
               }}
             />
+          ) : (
+            todo.content
           )}
-        </Item>
-      </div>
+        </TodoContent>
+
+        {!this.state.editting && (
+          <DeletedBtn
+            onClick={() => {
+              deleteTodo(todo.id);
+            }}
+          />
+        )}
+      </Item>
     );
   }
 }

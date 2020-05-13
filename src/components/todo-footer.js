@@ -9,40 +9,35 @@ const TodoFooter = (props) => {
   const itemText = unfinishedItemsCount > 1 ? "items" : "item";
   const haveCompletedItem = todos.length - unfinishedItemsCount > 0;
 
-  return (
-    <div>
-      {todos.length > 0 ? (
-        <div>
-          <Footer>
-            <TodoCount>{`${unfinishedItemsCount} ${itemText} left`}</TodoCount>
-            <Filters>
-              {Object.keys(STATUS).map((statusKey) => {
-                return (
-                  <li key={statusKey}>
-                    <a
-                      href="#/"
-                      onClick={() => {
-                        updateStatus(STATUS[statusKey]);
-                      }}
-                    >
-                      {capitalize(STATUS[statusKey])}
-                    </a>
-                  </li>
-                );
-              })}
-            </Filters>
-            <ClearCompleted
-              onClick={() => {
-                clearCompleted();
-              }}
-            >
-              {haveCompletedItem ? "clear completed" : ""}
-            </ClearCompleted>
-          </Footer>
-        </div>
-      ) : null}
-    </div>
-  );
+  return todos.length > 0 ? (
+    <Footer>
+      <span>{`${unfinishedItemsCount} ${itemText} left`}</span>
+      <Filters>
+        {Object.keys(STATUS).map((statusKey) => {
+          return (
+            <li key={statusKey}>
+              <a
+                href="#/"
+                onClick={() => {
+                  updateStatus(STATUS[statusKey]);
+                }}
+              >
+                {capitalize(STATUS[statusKey])}
+              </a>
+            </li>
+          );
+        })}
+      </Filters>
+      <button
+        className="ClearCompleted"
+        onClick={() => {
+          clearCompleted();
+        }}
+      >
+        {haveCompletedItem ? "clear completed" : ""}
+      </button>
+    </Footer>
+  ) : null;
 };
 
 export default TodoFooter;
@@ -68,11 +63,21 @@ const Footer = styled.div`
       0 9px 1px -3px rgba(0, 0, 0, 0.2), 0 16px 0 -6px #f6f6f6,
       0 17px 2px -6px rgba(0, 0, 0, 0.2);
   }
+  span {
+    text-align: left;
+  }
+  .ClearCompleted {
+    position: relative;
+    line-height: 20px;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 `;
 
-const TodoCount = styled.span`
-  text-align: left;
-`;
 const Filters = styled.ul`
   margin: 0;
   padding: 0;
@@ -103,13 +108,13 @@ const Filters = styled.ul`
   }
 `;
 
-const ClearCompleted = styled.button`
-  position: relative;
-  line-height: 20px;
-  text-decoration: none;
-  cursor: pointer;
+// const ClearCompleted = styled.button`
+//   position: relative;
+//   line-height: 20px;
+//   text-decoration: none;
+//   cursor: pointer;
 
-  &:hover {
-    text-decoration: underline;
-  }
-`;
+//   &:hover {
+//     text-decoration: underline;
+//   }
+// `;
