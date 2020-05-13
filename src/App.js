@@ -1,7 +1,8 @@
 import React from "react";
 import "./scss/reset.scss";
-import "./App.scss";
+// import "./App.scss";
 import { STATUS } from "./constant";
+import styled from "styled-components";
 
 import TodoHeader from "./components/todo-header.js";
 import TodoFooter from "./components/todo-footer.js";
@@ -87,27 +88,47 @@ class App extends React.Component {
     }
 
     return (
-      <div className="todo">
-        <h1 className="title">Todos</h1>
-        <TodoHeader
-          todo={this.state.todos}
-          addTodo={this.addTodo}
-          toggleAll={this.toggleAll}
-        />
-        <TodoList
-          todos={newtodos}
-          deleteTodo={this.deleteTodo}
-          toggleTodo={this.toggleTodo}
-          editTodo={this.editTodo}
-        />
-        <TodoFooter
-          todos={this.state.todos}
-          updateStatus={this.updateStatus}
-          clearCompleted={this.clearCompleted}
-        />
+      <div>
+        <Todo>
+          <Title>Todos</Title>
+          <TodoHeader
+            todo={this.state.todos}
+            addTodo={this.addTodo}
+            toggleAll={this.toggleAll}
+          />
+          <TodoList
+            todos={newtodos}
+            deleteTodo={this.deleteTodo}
+            toggleTodo={this.toggleTodo}
+            editTodo={this.editTodo}
+          />
+          <TodoFooter
+            todos={this.state.todos}
+            updateStatus={this.updateStatus}
+            clearCompleted={this.clearCompleted}
+          />
+        </Todo>
       </div>
     );
   }
 }
 
 export default App;
+
+const Todo = styled.div`
+  background: #fff;
+  margin: 130px 0 40px 0;
+  position: relative;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+`;
+
+const Title = styled.h1`
+  position: absolute;
+  top: -155px;
+  width: 100%;
+  font-size: 100px;
+  font-weight: 100;
+  text-align: center;
+  color: rgba(175, 47, 47, 0.15);
+  text-rendering: optimizeLegibility;
+`;
