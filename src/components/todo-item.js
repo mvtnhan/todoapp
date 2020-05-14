@@ -17,13 +17,12 @@ class TodoItem extends React.Component {
 
   render() {
     const { todo, toggleTodo, editTodo, deleteTodo } = this.props;
-
     return (
       <Item key={todo.id}>
         <ToggleTodo
           type="checkbox"
           onChange={() => {
-            toggleTodo(todo.id);
+            toggleTodo(todo, todo.id);
           }}
           checked={todo.done}
         />
@@ -36,7 +35,7 @@ class TodoItem extends React.Component {
               key={todo.id}
               onBlur={this.showInput}
               onChange={(e) => {
-                editTodo(e.target.value, todo.id);
+                editTodo(todo.id, todo, e.target.value);
               }}
             />
           ) : (

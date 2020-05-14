@@ -1,63 +1,105 @@
 import React from "react";
-import "./scss/reset.scss";
-import { STATUS } from "./constant";
 import styled from "styled-components";
+import axios from "axios";
 
 import TodoHeader from "./components/todo-header.js";
 import TodoFooter from "./components/todo-footer.js";
 import TodoList from "./components/todo-list";
+import { STATUS } from "./constant";
 
+import "./scss/reset.scss";
+//sua import
 class App extends React.Component {
-  todosKey = "todosKey";
-  dataString = localStorage.getItem(this.todosKey);
-
   state = {
-    todos: this.dataString != null ? JSON.parse(this.dataString) : [],
+    todos: [],
     status: "ALL",
   };
 
+  componentDidMount() {
+    axios.get("http://localhost:8080/todos").then((response) => {
+      this.setState({
+        todos: response.data,
+      });
+    });
+  }
+
   addTodo = (todo) => {
-    this.setState({
-      todos: [
-        ...this.state.todos,
-        { ...todo, id: this.state.todos.length + 1 },
-      ],
+    const newTodo = {
+      id: Date.now(),
+      content: todo.content,
+      done: false,
+    };
+    axios.post("http://localhost:8080/todos", newTodo).then(() => {
+      this.setState({
+        todos: this.state.todos.concat(newTodo),
+      });
     });
   };
 
   toggleAll = () => {
     const { todos } = this.state;
-    const counttoggle = todos.filter((todo) => todo.done).length;
+    const completedTodoNumber = todos.filter((todo) => todo.done).length;
+    const willSetToTrue = completedTodoNumber !== todos.length;
+
+    const todoTobeUpdated = todos.filter(
+      (todo) => todo.done === !willSetToTrue
+    );
+
+    for (let index = 0; index < todoTobeUpdated.length; index++) {
+      const todo = todoTobeUpdated[index];
+      axios.put(`http://localhost:8080/todos/${todo.id}`, {
+        content: todo.content,
+        done: !todo.done,
+      });
+    }
 
     this.setState({
       todos: todos.map((todo) => ({
         ...todo,
-        done: counttoggle !== todos.length,
+        done: willSetToTrue,
       })),
     });
   };
 
-  toggleTodo = (id) => {
-    this.setState({
-      todos: this.state.todos.map((todo) => ({
-        ...todo,
-        done: todo.id === id ? !todo.done : todo.done,
-      })),
-    });
+  toggleTodo = (todo, id) => {
+    axios
+      .put(`http://localhost:8080/todos/${id}`, {
+        content: todo.content,
+        done: !todo.done,
+      })
+      .then(() => {
+        this.setState({
+          todos: this.state.todos.map((todo) => ({
+            ...todo,
+            done: todo.id === id ? !todo.done : todo.done,
+          })),
+        });
+      });
   };
 
-  editTodo = (content, id) => {
-    this.setState({
-      todos: this.state.todos.map((todo) => ({
-        ...todo,
-        content: todo.id === id ? content : todo.content,
-      })),
-    });
+  editTodo = (id, todo, content) => {
+    axios
+      .put(`http://localhost:8080/todos/${id}`, {
+        content: content,
+        done: todo.done,
+      })
+      .then(() => {
+        console.log("response", this.state.todos);
+        this.setState({
+          todos: this.state.todos.map((todo) => ({
+            ...todo,
+
+            content: todo.id === id ? content : todo.content,
+          })),
+        });
+      });
   };
 
   deleteTodo = (id) => {
-    this.setState({
-      todos: this.state.todos.filter((todo) => todo.id !== id),
+    axios.delete(`http://localhost:8080/todos/${id}`).then(() => {
+      this.setState({
+        todos: this.state.todos.filter((todo) => todo.id !== id),
+      });
     });
   };
 
@@ -68,24 +110,26 @@ class App extends React.Component {
   };
 
   clearCompleted = () => {
+    for (let index = 0; index < this.state.todos.length; index++) {
+      const todo = this.state.todos[index];
+      if (todo.done) {
+        axios.delete(`http://localhost:8080/todos/${todo.id}`);
+      }
+    }
     this.setState({
-      todos: this.state.todos.filter((todo) => todo.done !== true),
+      todos: this.state.todos.filter((todo) => !todo.done),
     });
   };
 
   render() {
-    localStorage.setItem(this.todosKey, JSON.stringify(this.state.todos));
-    let newtodos = this.state.todos;
-    if (this.state.status === STATUS.ACTIVE) {
-      newtodos = this.state.todos.filter((todo) => {
-        return todo.done === false;
-      });
-    } else if (this.state.status === STATUS.COMPLETED) {
-      newtodos = this.state.todos.filter((todo) => {
-        return todo.done === true;
-      });
-    }
-
+    const todoList = this.state.todos.filter((todo) => {
+      if (this.state.status === STATUS.ACTIVE) {
+        return !todo.done;
+      } else if (this.state.status === STATUS.COMPLETED) {
+        return todo.done;
+      }
+      return true;
+    });
     return (
       <Wrapper>
         <Title>Todos</Title>
@@ -95,7 +139,7 @@ class App extends React.Component {
           toggleAll={this.toggleAll}
         />
         <TodoList
-          todos={newtodos}
+          todos={todoList}
           deleteTodo={this.deleteTodo}
           toggleTodo={this.toggleTodo}
           editTodo={this.editTodo}

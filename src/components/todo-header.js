@@ -15,7 +15,11 @@ class TodoHeader extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.addTodo(this.state);
+
+    this.props.addTodo({
+      content: this.state.content,
+      done: this.state.done,
+    });
     this.setState({
       content: "",
     });
