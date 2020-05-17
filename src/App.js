@@ -5,10 +5,10 @@ import axios from "axios";
 import TodoHeader from "./components/todo-header.js";
 import TodoFooter from "./components/todo-footer.js";
 import TodoList from "./components/todo-list";
-import { STATUS } from "./constant";
+import { STATUS, URL } from "./constant";
 
 import "./scss/reset.scss";
-//sua import
+
 class App extends React.Component {
   state = {
     todos: [],
@@ -16,7 +16,7 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    axios.get("http://localhost:8080/todos").then((response) => {
+    axios.get(URL.TODOS).then((response) => {
       this.setState({
         todos: response.data,
       });
@@ -29,7 +29,7 @@ class App extends React.Component {
       content: todo.content,
       done: false,
     };
-    axios.post("http://localhost:8080/todos", newTodo).then(() => {
+    axios.post(URL.TODOS, newTodo).then(() => {
       this.setState({
         todos: this.state.todos.concat(newTodo),
       });
@@ -47,7 +47,7 @@ class App extends React.Component {
 
     for (let index = 0; index < todoTobeUpdated.length; index++) {
       const todo = todoTobeUpdated[index];
-      axios.put(`http://localhost:8080/todos/${todo.id}`, {
+      axios.put(`${URL.TODOS}/${todo.id}`, {
         content: todo.content,
         done: !todo.done,
       });
@@ -63,7 +63,7 @@ class App extends React.Component {
 
   toggleTodo = (todo, id) => {
     axios
-      .put(`http://localhost:8080/todos/${id}`, {
+      .put(`${URL.TODOS}/${id}`, {
         content: todo.content,
         done: !todo.done,
       })
@@ -79,12 +79,11 @@ class App extends React.Component {
 
   editTodo = (id, todo, content) => {
     axios
-      .put(`http://localhost:8080/todos/${id}`, {
+      .put(`${URL.TODOS}/${id}`, {
         content: content,
         done: todo.done,
       })
       .then(() => {
-        console.log("response", this.state.todos);
         this.setState({
           todos: this.state.todos.map((todo) => ({
             ...todo,
@@ -96,7 +95,7 @@ class App extends React.Component {
   };
 
   deleteTodo = (id) => {
-    axios.delete(`http://localhost:8080/todos/${id}`).then(() => {
+    axios.delete(`${URL.TODOS}/${id}`).then(() => {
       this.setState({
         todos: this.state.todos.filter((todo) => todo.id !== id),
       });
@@ -113,7 +112,7 @@ class App extends React.Component {
     for (let index = 0; index < this.state.todos.length; index++) {
       const todo = this.state.todos[index];
       if (todo.done) {
-        axios.delete(`http://localhost:8080/todos/${todo.id}`);
+        axios.delete(`${URL.TODOS}/${todo.id}`);
       }
     }
     this.setState({
