@@ -6,6 +6,7 @@ import TodoHeader from "./components/todo-header.js";
 import TodoFooter from "./components/todo-footer.js";
 import TodoList from "./components/todo-list";
 import { STATUS, URL } from "./constant";
+import imgLoading from "./images/isLoading.gif";
 
 import "./scss/reset.scss";
 
@@ -13,14 +14,31 @@ class App extends React.Component {
   state = {
     todos: [],
     status: "ALL",
+    isLoading: false,
+    error: "",
   };
 
   componentDidMount() {
-    axios.get(URL.TODOS).then((response) => {
-      this.setState({
-        todos: response.data,
-      });
+    this.setState({
+      isLoading: true,
     });
+    axios
+      .get(URL.TODOS)
+      .then((response) => {
+        this.setState({
+          todos: response.data,
+        });
+      })
+      .catch((err) => {
+        this.setState({
+          error: err.data,
+        });
+      })
+      .finally(() => {
+        this.setState({
+          isLoading: false,
+        });
+      });
   }
 
   addTodo = (todo) => {
@@ -129,8 +147,10 @@ class App extends React.Component {
       }
       return true;
     });
+
     return (
       <Wrapper>
+        {this.state.isLoading && <img src={imgLoading} alt="loading" />}
         <Title>Todos</Title>
         <TodoHeader
           todo={this.state.todos}
