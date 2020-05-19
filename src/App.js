@@ -150,13 +150,13 @@ class App extends React.Component {
 
     return (
       <Wrapper>
-        {this.state.isLoading && <img src={imgLoading} alt="loading" />}
         <Title>Todos</Title>
         <TodoHeader
           todo={this.state.todos}
           addTodo={this.addTodo}
           toggleAll={this.toggleAll}
         />
+        {this.state.isLoading && <Loading src={imgLoading} alt="loading" />}
         <TodoList
           todos={todoList}
           deleteTodo={this.deleteTodo}
@@ -180,6 +180,13 @@ const Wrapper = styled.div`
   margin: 130px 0 40px 0;
   position: relative;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+`;
+
+const Loading = styled.img`
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
 `;
 
 const Title = styled.h1`
