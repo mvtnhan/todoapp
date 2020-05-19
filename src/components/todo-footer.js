@@ -100,21 +100,9 @@ const Filters = styled.ul`
       &:hover {
         border: 1px solid rgba(175, 47, 47, 0.1);
       }
-
-      a.selected {
+      .selected {
         border-color: rgba(175, 47, 47, 0.2);
       }
     }
   }
 `;
-
-// const ClearCompleted = styled.button`
-//   position: relative;
-//   line-height: 20px;
-//   text-decoration: none;
-//   cursor: pointer;
-
-//   &:hover {
-//     text-decoration: underline;
-//   }
-// `;
