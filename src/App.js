@@ -1,14 +1,14 @@
+import axios from "axios";
 import React from "react";
 import styled from "styled-components";
-import axios from "axios";
 
-import TodoHeader from "./components/todo-header.js";
-import TodoFooter from "./components/todo-footer.js";
-import TodoList from "./components/todo-list";
 import { STATUS, URL } from "./constant";
-import imgLoading from "./images/isLoading.gif";
+import TodoFooter from "./components/todo-footer.js";
+import TodoHeader from "./components/todo-header.js";
+import TodoList from "./components/todo-list";
 
 import "./scss/reset.scss";
+import imgLoading from "./images/isLoading.gif";
 
 class App extends React.Component {
   state = {
