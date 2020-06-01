@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
 
@@ -56,6 +57,13 @@ class TodoItem extends React.Component {
 }
 
 export default TodoItem;
+
+TodoItem.propsTypes = {
+  todo: PropTypes.elementType.isRequired,
+  toggleTodo: PropTypes.func.isRequired,
+  editTodo: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
+};
 
 const DeletedBtn = styled.button`
   display: none;
