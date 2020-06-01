@@ -1,4 +1,6 @@
+import PropTypes from "prop-types";
 import React from "react";
+
 import TodoItem from "./todo-item.js";
 
 const TodoList = (props) => {
@@ -20,3 +22,10 @@ const TodoList = (props) => {
 };
 
 export default TodoList;
+
+TodoList.prototype = {
+  todos: PropTypes.array.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
+  toggleTodo: PropTypes.func.isRequired,
+  editTodo: PropTypes.func.isRequired,
+};

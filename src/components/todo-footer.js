@@ -1,7 +1,9 @@
+import PropTypes from "prop-types";
 import React from "react";
-import { STATUS } from "../constant";
-import { capitalize } from "../util";
 import styled from "styled-components";
+
+import { capitalize } from "../util";
+import { STATUS } from "../constant";
 
 const TodoFooter = (props) => {
   const { todos, updateStatus, clearCompleted } = props;
@@ -41,6 +43,12 @@ const TodoFooter = (props) => {
 };
 
 export default TodoFooter;
+
+TodoFooter.prototype = {
+  todos: PropTypes.elementType.isRequired,
+  updateStatus: PropTypes.func.isRequired,
+  clearCompleted: PropTypes.func.isRequired,
+};
 
 const Footer = styled.div`
   display: flex;
