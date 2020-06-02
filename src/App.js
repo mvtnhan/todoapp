@@ -1,8 +1,8 @@
-import axios from "axios";
+// import axios from "axios";
 import React from "react";
 import styled from "styled-components";
 
-import { STATUS, URL } from "./constant";
+import { STATUS } from "./constant";
 import TodoFooter from "./components/todo-footer.js";
 import TodoHeader from "./components/todo-header.js";
 import TodoList from "./components/todo-list";
@@ -12,111 +12,97 @@ import imgLoading from "./images/isLoading.gif";
 
 class App extends React.Component {
   state = {
-    todos: [],
+    todos: {
+      1: {
+        id: 1,
+        content: "sell a keyboard",
+        done: false,
+      },
+      2: {
+        id: 2,
+        content: "buy a mouse",
+        done: false,
+      },
+      3: {
+        id: 3,
+        content: "play a new game",
+        done: true,
+      },
+    },
     status: "ALL",
     isLoading: false,
     error: "",
   };
 
-  componentDidMount() {
-    this.setState({
-      isLoading: true,
-    });
-    axios
-      .get(URL.TODOS)
-      .then((response) => {
-        this.setState({
-          todos: response.data,
-        });
-      })
-      .catch((err) => {
-        this.setState({
-          error: err.data,
-        });
-      })
-      .finally(() => {
-        this.setState({
-          isLoading: false,
-        });
-      });
-  }
-
   addTodo = (todo) => {
+    const id = Date.now();
+
     const newTodo = {
-      id: Date.now(),
-      content: todo.content,
-      done: false,
+      [id]: {
+        id,
+        content: todo.content,
+        done: false,
+      },
     };
-    axios.post(URL.TODOS, newTodo).then(() => {
-      this.setState({
-        todos: this.state.todos.concat(newTodo),
-      });
+    this.setState({
+      todos: Object.assign({}, this.state.todos, newTodo),
     });
   };
 
   toggleAll = () => {
-    const { todos } = this.state;
-    const completedTodoNumber = todos.filter((todo) => todo.done).length;
-    const willSetToTrue = completedTodoNumber !== todos.length;
-
-    const todoTobeUpdated = todos.filter(
-      (todo) => todo.done === !willSetToTrue
+    const y = Object.keys(this.state.todos).map(
+      (item) => this.state.todos[item]
     );
+    const counttoggle = y.filter((todo) => todo.done).length;
 
-    for (let index = 0; index < todoTobeUpdated.length; index++) {
-      const todo = todoTobeUpdated[index];
-      axios.put(`${URL.TODOS}/${todo.id}`, {
-        content: todo.content,
-        done: !todo.done,
-      });
-    }
+    // this.setState({
+    //   todos: todos.map((todo) => ({
+    //     ...todo,
+    //     done: counttoggle !== todos.length,
+    //   })),
+    // });
+  };
+
+  toggleTodo = (id, content, done) => {
+    const todoToggle = {
+      id,
+      content,
+      done: !done,
+    };
 
     this.setState({
-      todos: todos.map((todo) => ({
-        ...todo,
-        done: willSetToTrue,
-      })),
+      todos: Object.assign({}, this.state.todos, { [id]: todoToggle }),
     });
   };
 
-  toggleTodo = (todo, id) => {
-    axios
-      .put(`${URL.TODOS}/${id}`, {
-        content: todo.content,
-        done: !todo.done,
-      })
-      .then(() => {
-        this.setState({
-          todos: this.state.todos.map((todo) => ({
-            ...todo,
-            done: todo.id === id ? !todo.done : todo.done,
-          })),
-        });
-      });
-  };
+  editTodo = ({ id, content, done }) => {
+    const todoEdit = {
+      id,
+      content,
+      done,
+    };
 
-  editTodo = (id, todo, content) => {
-    axios
-      .put(`${URL.TODOS}/${id}`, {
-        content: content,
-        done: todo.done,
-      })
-      .then(() => {
-        this.setState({
-          todos: this.state.todos.map((todo) => ({
-            ...todo,
-
-            content: todo.id === id ? content : todo.content,
-          })),
-        });
-      });
+    this.setState({
+      todos: Object.assign({}, this.state.todos, { [id]: todoEdit }),
+    });
   };
 
   deleteTodo = (id) => {
-    axios.delete(`${URL.TODOS}/${id}`).then(() => {
-      this.setState({
-        todos: this.state.todos.filter((todo) => todo.id !== id),
-      });
+    delete this.state.todos[id];
+
+    this.setState({
+      todos: this.state.todos,
+    });
+  };
+
+  clearCompleted = () => {
+    const x = Object.keys(this.state.todos).map(
+      (item) => this.state.todos[item]
+    );
+    const y = x.filter((todo) => todo.done !== true);
+    console.log("y", y);
+    this.setState({
+      todos: this.state.todos,
     });
   };
 
@@ -126,20 +112,12 @@ class App extends React.Component {
     });
   };
 
-  clearCompleted = () => {
-    for (let index = 0; index < this.state.todos.length; index++) {
-      const todo = this.state.todos[index];
-      if (todo.done) {
-        axios.delete(`${URL.TODOS}/${todo.id}`);
-      }
-    }
-    this.setState({
-      todos: this.state.todos.filter((todo) => !todo.done),
-    });
-  };
-
   render() {
-    const todoList = this.state.todos.filter((todo) => {
+    const y = Object.keys(this.state.todos).map(
+      (item) => this.state.todos[item]
+    );
+
+    const todoList = y.filter((todo) => {
       if (this.state.status === STATUS.ACTIVE) {
         return !todo.done;
       } else if (this.state.status === STATUS.COMPLETED) {
@@ -152,19 +130,19 @@ class App extends React.Component {
       <Wrapper>
         <Title>Todos</Title>
         <TodoHeader
-          todo={this.state.todos}
+          todo={y}
           addTodo={this.addTodo}
           toggleAll={this.toggleAll}
         />
         {this.state.isLoading && <Loading src={imgLoading} alt="loading" />}
         <TodoList
-          todos={todoList}
+          todos={y}
           deleteTodo={this.deleteTodo}
           toggleTodo={this.toggleTodo}
           editTodo={this.editTodo}
         />
         <TodoFooter
-          todos={this.state.todos}
+          todos={todoList}
           updateStatus={this.updateStatus}
           clearCompleted={this.clearCompleted}
         />
