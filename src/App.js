@@ -92,15 +92,21 @@ class App extends React.Component {
     });
   };
 
+  // const newTodos = Object.keys(todos)
+  //   .map((key) => todos[key])
+  //   .filter((todo) => todo.id !== id)
+  //   .reduce((acc, item) => {
+  //     return Object.assign({}, acc, { [item.id]: item });
+  //   }, {});
+
   deleteTodo = ({ id }) => {
     const { todos } = this.state;
-    const newTodos = Object.keys(todos)
-      .map((key) => todos[key])
-      .filter((todo) => todo.id !== id)
-      .reduce((acc, item) => {
-        return Object.assign({}, acc, { [item.id]: item });
-      }, {});
-    console.log("newTodos", newTodos);
+    const newTodos = Object.keys(todos).reduce((acc, key) => {
+      if (key === id.toString()) return acc;
+      return { ...acc, [key]: todos[key] };
+      //return Object.assign({}, acc, { [key]: todos[key] });
+    }, {});
+
     this.setState({
       todos: Object.assign({}, newTodos),
     });
