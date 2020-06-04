@@ -94,14 +94,13 @@ class App extends React.Component {
 
   deleteTodo = ({ id }) => {
     const { todos } = this.state;
-    const newTodos = Object.keys(todos).reduce(() => {
-      return Object.assign(
-        {},
-        Object.keys(todos)
-          .map((key) => todos[key])
-          .filter((todo) => todo.id !== id)
-      );
-    }, {});
+    const newTodos = Object.keys(todos)
+      .map((key) => todos[key])
+      .filter((todo) => todo.id !== id)
+      .reduce((acc, item) => {
+        return Object.assign({}, acc, { [item.id]: item });
+      }, {});
+    console.log("newTodos", newTodos);
     this.setState({
       todos: Object.assign({}, newTodos),
     });
