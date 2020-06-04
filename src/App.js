@@ -34,7 +34,7 @@ class App extends React.Component {
     error: "",
   };
 
-  addTodo = (todo) => {
+  addTodo = ({ todo }) => {
     const id = Date.now();
 
     const newTodos = {
@@ -68,7 +68,7 @@ class App extends React.Component {
     });
   };
 
-  toggleTodo = (id, content, done) => {
+  toggleTodo = ({ id, content, done }) => {
     const todoToggle = {
       id,
       content,
@@ -92,10 +92,9 @@ class App extends React.Component {
     });
   };
 
-  deleteTodo = (id) => {
-    //dung reduce
+  deleteTodo = ({ id }) => {
     const { todos } = this.state;
-    const willTodo = Object.keys(todos).reduce(() => {
+    const newTodos = Object.keys(todos).reduce(() => {
       return Object.assign(
         {},
         Object.keys(todos)
@@ -103,20 +102,14 @@ class App extends React.Component {
           .filter((todo) => todo.id !== id)
       );
     }, {});
-
-    //dungf filrer
-    // const { todos } = this.state;
-    // const newTodo = Object.keys(todos)
-    //   .map((key) => todos[key])
-    //   .filter((todo) => todo.id !== id);
     this.setState({
-      todos: Object.assign({}, willTodo),
+      todos: Object.assign({}, newTodos),
     });
   };
 
   clearCompleted = () => {
     const { todos } = this.state;
-    const newTodo = Object.keys(todos).reduce(() => {
+    const newTodos = Object.keys(todos).reduce(() => {
       return Object.assign(
         {},
         Object.keys(todos)
@@ -126,11 +119,11 @@ class App extends React.Component {
     }, {});
 
     this.setState({
-      todos: newTodo,
+      todos: newTodos,
     });
   };
 
-  updateStatus = (status) => {
+  updateStatus = ({ status }) => {
     this.setState({
       status: status,
     });

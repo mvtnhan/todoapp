@@ -21,7 +21,7 @@ const TodoFooter = (props) => {
               <a
                 href="#/"
                 onClick={() => {
-                  updateStatus(STATUS[statusKey]);
+                  updateStatus({ status: STATUS[statusKey] });
                 }}
               >
                 {capitalize(STATUS[statusKey])}

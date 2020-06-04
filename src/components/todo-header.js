@@ -17,8 +17,10 @@ class TodoHeader extends React.Component {
     e.preventDefault();
 
     this.props.addTodo({
-      content: this.state.content,
-      done: this.state.done,
+      todo: {
+        content: this.state.content,
+        done: this.state.done,
+      },
     });
     this.setState({
       content: "",

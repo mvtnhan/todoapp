@@ -23,7 +23,7 @@ class TodoItem extends React.Component {
         <ToggleTodo
           type="checkbox"
           onChange={() => {
-            toggleTodo(todo.id, todo.content, todo.done);
+            toggleTodo({ id: todo.id, content: todo.content, done: todo.done });
           }}
           checked={todo.done}
         />
@@ -51,7 +51,7 @@ class TodoItem extends React.Component {
         {!this.state.editting && (
           <DeletedBtn
             onClick={() => {
-              deleteTodo(todo.id);
+              deleteTodo({ id: todo.id });
             }}
           />
         )}
