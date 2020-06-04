@@ -131,7 +131,6 @@ class App extends React.Component {
   };
 
   updateStatus = (status) => {
-    console.log("status o updatestatus", status);
     this.setState({
       status: status,
     });
