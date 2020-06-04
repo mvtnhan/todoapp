@@ -13,18 +13,18 @@ import imgLoading from "./images/isLoading.gif";
 class App extends React.Component {
   state = {
     todos: {
+      0: {
+        id: 0,
+        content: "sell a keyboard",
+        done: false,
+      },
       1: {
         id: 1,
-        content: "sell a keyboard",
+        content: "buy a mouse",
         done: false,
       },
       2: {
         id: 2,
-        content: "buy a mouse",
-        done: false,
-      },
-      3: {
-        id: 3,
         content: "play a new game",
         done: true,
       },
@@ -37,7 +37,7 @@ class App extends React.Component {
   addTodo = (todo) => {
     const id = Date.now();
 
-    const newTodo = {
+    const newTodos = {
       [id]: {
         id,
         content: todo.content,
@@ -45,22 +45,27 @@ class App extends React.Component {
       },
     };
     this.setState({
-      todos: Object.assign({}, this.state.todos, newTodo),
+      todos: Object.assign({}, this.state.todos, newTodos),
     });
   };
 
   toggleAll = () => {
-    const y = Object.keys(this.state.todos).map(
-      (item) => this.state.todos[item]
-    );
-    const counttoggle = y.filter((todo) => todo.done).length;
+    const { todos } = this.state;
+    const countDone = Object.keys(todos)
+      .map((key) => todos[key])
+      .filter((todo) => todo.done).length;
 
-    // this.setState({
-    //   todos: todos.map((todo) => ({
-    //     ...todo,
-    //     done: counttoggle !== todos.length,
-    //   })),
-    // });
+    const doneValue = Object.keys(todos).length !== countDone;
+
+    const newTodos = Object.keys(todos).reduce((acc, key) => {
+      return Object.assign({}, acc, {
+        [key]: { ...todos[key], done: doneValue },
+      });
+    }, {});
+
+    this.setState({
+      todos: newTodos,
+    });
   };
 
   toggleTodo = (id, content, done) => {
@@ -88,36 +93,55 @@ class App extends React.Component {
   };
 
   deleteTodo = (id) => {
-    delete this.state.todos[id];
+    //dung reduce
+    const { todos } = this.state;
+    const willTodo = Object.keys(todos).reduce(() => {
+      return Object.assign(
+        {},
+        Object.keys(todos)
+          .map((key) => todos[key])
+          .filter((todo) => todo.id !== id)
+      );
+    }, {});
 
+    //dungf filrer
+    // const { todos } = this.state;
+    // const newTodo = Object.keys(todos)
+    //   .map((key) => todos[key])
+    //   .filter((todo) => todo.id !== id);
     this.setState({
-      todos: this.state.todos,
+      todos: Object.assign({}, willTodo),
     });
   };
 
   clearCompleted = () => {
-    const x = Object.keys(this.state.todos).map(
-      (item) => this.state.todos[item]
-    );
-    const y = x.filter((todo) => todo.done !== true);
-    console.log("y", y);
+    const { todos } = this.state;
+    const newTodo = Object.keys(todos).reduce(() => {
+      return Object.assign(
+        {},
+        Object.keys(todos)
+          .map((key) => todos[key])
+          .filter((todo) => !todo.done)
+      );
+    }, {});
+
     this.setState({
-      todos: this.state.todos,
+      todos: newTodo,
     });
   };
 
   updateStatus = (status) => {
+    console.log("status o updatestatus", status);
     this.setState({
       status: status,
     });
   };
 
   render() {
-    const y = Object.keys(this.state.todos).map(
+    const newTodo = Object.keys(this.state.todos).map(
       (item) => this.state.todos[item]
     );
-
-    const todoList = y.filter((todo) => {
+    const todoList = newTodo.filter((todo) => {
       if (this.state.status === STATUS.ACTIVE) {
         return !todo.done;
       } else if (this.state.status === STATUS.COMPLETED) {
@@ -130,19 +154,19 @@ class App extends React.Component {
       <Wrapper>
         <Title>Todos</Title>
         <TodoHeader
-          todo={y}
+          todo={newTodo}
           addTodo={this.addTodo}
           toggleAll={this.toggleAll}
         />
         {this.state.isLoading && <Loading src={imgLoading} alt="loading" />}
         <TodoList
-          todos={y}
+          todos={todoList}
           deleteTodo={this.deleteTodo}
           toggleTodo={this.toggleTodo}
           editTodo={this.editTodo}
         />
         <TodoFooter
-          todos={todoList}
+          todos={newTodo}
           updateStatus={this.updateStatus}
           clearCompleted={this.clearCompleted}
         />

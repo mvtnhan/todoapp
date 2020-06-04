@@ -7,6 +7,7 @@ import { STATUS } from "../constant";
 
 const TodoFooter = (props) => {
   const { todos, updateStatus, clearCompleted } = props;
+  console.log("todos", todos);
   const unfinishedItemsCount = todos.filter((todo) => !todo.done).length;
   const itemText = unfinishedItemsCount > 1 ? "items" : "item";
   const haveCompletedItem = todos.length - unfinishedItemsCount > 0;
@@ -21,6 +22,7 @@ const TodoFooter = (props) => {
               <a
                 href="#/"
                 onClick={() => {
+                  console.log("status o todoitem", STATUS[statusKey]);
                   updateStatus(STATUS[statusKey]);
                 }}
               >
