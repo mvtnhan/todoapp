@@ -95,19 +95,20 @@ class App extends React.Component {
       });
   };
 
-  editTodo = (id, todo, content) => {
+  editTodo = ({ id, done, content }) => {
     axios
       .put(`${URL.TODOS}/${id}`, {
         content: content,
-        done: todo.done,
+        done: done,
       })
       .then(() => {
         this.setState({
-          todos: this.state.todos.map((todo) => ({
-            ...todo,
-
-            content: todo.id === id ? content : todo.content,
-          })),
+          todos: this.state.todos.map((todo) => {
+            return {
+              ...todo,
+              content: todo.id === id ? content : todo.content,
+            };
+          }),
         });
       });
   };
