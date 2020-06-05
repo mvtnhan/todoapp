@@ -38,7 +38,16 @@ class TodoItem extends React.Component {
               type="edit"
               value={this.state.currenContent}
               key={todo.id}
-              onBlur={this.showInput}
+              onBlur={() => {
+                editTodo({
+                  id: todo.id,
+                  done: todo.done,
+                  content: this.state.currenContent,
+                });
+                this.setState({
+                  editting: !this.state.editting,
+                });
+              }}
               onChange={(e) => {
                 this.setState({
                   currenContent: e.target.value,
@@ -50,6 +59,9 @@ class TodoItem extends React.Component {
                     id: todo.id,
                     done: todo.done,
                     content: this.state.currenContent,
+                  });
+                  this.setState({
+                    editting: !this.state.editting,
                   });
                 }
               }}
