@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "./static/css/main.bb3efbeb.chunk.css",
+    "main.js": "./static/js/main.203d81fb.chunk.js",
+    "main.js.map": "./static/js/main.203d81fb.chunk.js.map",
+    "runtime-main.js": "./static/js/runtime-main.7a553f36.js",
+    "runtime-main.js.map": "./static/js/runtime-main.7a553f36.js.map",
+    "static/js/2.376b55b4.chunk.js": "./static/js/2.376b55b4.chunk.js",
+    "static/js/2.376b55b4.chunk.js.map": "./static/js/2.376b55b4.chunk.js.map",
+    "index.html": "./index.html",
+    "precache-manifest.6c8b8a313665a362680c26bcdd75e848.js": "./precache-manifest.6c8b8a313665a362680c26bcdd75e848.js",
+    "service-worker.js": "./service-worker.js",
+    "static/css/main.bb3efbeb.chunk.css.map": "./static/css/main.bb3efbeb.chunk.css.map",
+    "static/js/2.376b55b4.chunk.js.LICENSE.txt": "./static/js/2.376b55b4.chunk.js.LICENSE.txt",
+    "static/media/checkbox-todo-active.svg": "./static/media/checkbox-todo-active.6ef2b847.svg",
+    "static/media/checkbox-todo.svg": "./static/media/checkbox-todo.40e0f797.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.7a553f36.js",
+    "static/js/2.376b55b4.chunk.js",
+    "static/css/main.bb3efbeb.chunk.css",
+    "static/js/main.203d81fb.chunk.js"
+  ]
+}
