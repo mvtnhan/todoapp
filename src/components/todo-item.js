@@ -6,9 +6,13 @@ import Checkbox from "../images/checkbox-todo.svg";
 import Checked from "../images/checkbox-todo-active.svg";
 
 class TodoItem extends React.Component {
-  state = {
-    editting: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      editting: false,
+      currenContent: props.todo.content,
+    };
+  }
 
   showInput = () => {
     this.setState({
@@ -32,11 +36,22 @@ class TodoItem extends React.Component {
           {this.state.editting ? (
             <EditTodo
               type="edit"
-              value={todo.content}
+              value={this.state.currenContent}
               key={todo.id}
               onBlur={this.showInput}
               onChange={(e) => {
-                editTodo(todo.id, todo, e.target.value);
+                this.setState({
+                  currenContent: e.target.value,
+                });
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  editTodo({
+                    id: todo.id,
+                    done: todo.done,
+                    content: this.state.currenContent,
+                  });
+                }
               }}
             />
           ) : (
