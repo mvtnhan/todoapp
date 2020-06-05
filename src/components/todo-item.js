@@ -14,7 +14,7 @@ class TodoItem extends React.Component {
     };
   }
 
-  showInput = () => {
+  toggleEditing = () => {
     this.setState({
       editting: !this.state.editting,
     });
@@ -22,6 +22,14 @@ class TodoItem extends React.Component {
 
   render() {
     const { todo, toggleTodo, editTodo, deleteTodo } = this.props;
+    const closeToggleEdit = () => {
+      editTodo({
+        id: todo.id,
+        done: todo.done,
+        content: this.state.currenContent,
+      });
+      this.toggleEditing();
+    };
     return (
       <Item key={todo.id}>
         <ToggleTodo
@@ -32,21 +40,14 @@ class TodoItem extends React.Component {
           checked={todo.done}
         />
 
-        <TodoContent onDoubleClick={this.showInput}>
+        <TodoContent onDoubleClick={this.toggleEditing}>
           {this.state.editting ? (
             <EditTodo
               type="edit"
               value={this.state.currenContent}
               key={todo.id}
               onBlur={() => {
-                editTodo({
-                  id: todo.id,
-                  done: todo.done,
-                  content: this.state.currenContent,
-                });
-                this.setState({
-                  editting: !this.state.editting,
-                });
+                closeToggleEdit();
               }}
               onChange={(e) => {
                 this.setState({
@@ -55,14 +56,7 @@ class TodoItem extends React.Component {
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  editTodo({
-                    id: todo.id,
-                    done: todo.done,
-                    content: this.state.currenContent,
-                  });
-                  this.setState({
-                    editting: !this.state.editting,
-                  });
+                  closeToggleEdit();
                 }
               }}
             />
