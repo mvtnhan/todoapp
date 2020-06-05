@@ -33,13 +33,26 @@ class TodoItem extends React.Component {
           checked={todo.done}
         />
 
-        <TodoContent onDoubleClick={this.toggleEditing}>
+        <TodoContent
+          onDoubleClick={() => {
+            if (!this.state.editting) {
+              this.setState({
+                editting: true,
+              });
+            }
+          }}
+        >
           {this.state.editting ? (
             <EditTodo
               type="edit"
               value={this.state.currenContent}
               key={todo.id}
-              onBlur={this.toggleEditing}
+              onBlur={() => {
+                this.setState({
+                  currenContent: todo.content,
+                  editting: false,
+                });
+              }}
               onChange={(e) => {
                 this.setState({
                   currenContent: e.target.value,
