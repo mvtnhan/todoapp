@@ -22,14 +22,7 @@ class TodoItem extends React.Component {
 
   render() {
     const { todo, toggleTodo, editTodo, deleteTodo } = this.props;
-    const closeToggleEdit = () => {
-      editTodo({
-        id: todo.id,
-        done: todo.done,
-        content: this.state.currenContent,
-      });
-      this.toggleEditing();
-    };
+
     return (
       <Item key={todo.id}>
         <ToggleTodo
@@ -46,9 +39,7 @@ class TodoItem extends React.Component {
               type="edit"
               value={this.state.currenContent}
               key={todo.id}
-              onBlur={() => {
-                closeToggleEdit();
-              }}
+              onBlur={this.toggleEditing}
               onChange={(e) => {
                 this.setState({
                   currenContent: e.target.value,
@@ -56,7 +47,14 @@ class TodoItem extends React.Component {
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  closeToggleEdit();
+                  editTodo({
+                    id: todo.id,
+                    done: todo.done,
+                    content: this.state.currenContent,
+                  });
+                  this.toggleEditing();
+                } else {
+                  this.value = this.state.currenContent;
                 }
               }}
             />
