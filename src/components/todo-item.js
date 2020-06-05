@@ -53,8 +53,6 @@ class TodoItem extends React.Component {
                     content: this.state.currenContent,
                   });
                   this.toggleEditing();
-                } else {
-                  this.value = this.state.currenContent;
                 }
               }}
             />
