@@ -6,11 +6,15 @@ import Checkbox from "../images/checkbox-todo.svg";
 import Checked from "../images/checkbox-todo-active.svg";
 
 class TodoItem extends React.Component {
-  state = {
-    editting: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      editting: false,
+      currenContent: props.todo.content,
+    };
+  }
 
-  showInput = () => {
+  toggleEditing = () => {
     this.setState({
       editting: !this.state.editting,
     });
@@ -28,19 +32,40 @@ class TodoItem extends React.Component {
           checked={todo.done}
         />
 
-        <TodoContent onDoubleClick={this.showInput}>
+        <TodoContent
+          onDoubleClick={() => {
+            if (!this.state.editting) {
+              this.setState({
+                editting: true,
+              });
+            }
+          }}
+        >
           {this.state.editting ? (
             <EditTodo
               type="edit"
-              value={todo.content}
+              value={this.state.currenContent}
               key={todo.id}
-              onBlur={this.showInput}
-              onChange={(e) => {
-                editTodo({
-                  id: todo.id,
-                  content: e.target.value,
-                  done: todo.done,
+              onBlur={() => {
+                this.setState({
+                  currenContent: todo.content,
+                  editting: false,
                 });
+              }}
+              onChange={(e) => {
+                this.setState({
+                  currenContent: e.target.value,
+                });
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  editTodo({
+                    id: todo.id,
+                    content: this.state.currenContent,
+                    done: todo.done,
+                  });
+                  this.toggleEditing();
+                }
               }}
             />
           ) : (
