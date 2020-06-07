@@ -13,18 +13,18 @@ import imgLoading from "./images/isLoading.gif";
 class App extends React.Component {
   state = {
     todos: {
-      0: {
-        id: 0,
+      1591513897340: {
+        id: 1591513897340,
         content: "sell a keyboard",
         done: false,
       },
-      1: {
-        id: 1,
+      1591513897341: {
+        id: 1591513897341,
         content: "buy a mouse",
         done: false,
       },
-      2: {
-        id: 2,
+      1591513897343: {
+        id: 1591513897343,
         content: "play a new game",
         done: true,
       },
@@ -190,7 +190,7 @@ const Loading = styled.img`
 
 const Title = styled.h1`
   position: absolute;
-  top: -155px;
+  top: -140px;
   width: 100%;
   font-size: 100px;
   font-weight: 100;
