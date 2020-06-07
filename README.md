@@ -1,8 +1,8 @@
-## A todo app using ReactJS
+# A Todo app using ReactJS
 
-![Todo Application](./todoapp.jpg "Todo Application")
+<p align="center"><img src="./todoapp.jpg" alt="Todo Application" /></p>
 
-Todo data structure in **master** branch
+### Todo data structure in **master** branch
 
 ```javascript
 {
@@ -24,7 +24,7 @@ Todo data structure in **master** branch
 }
 ```
 
-Todo data structure in **todoArray** branch
+### Todo data structure in **todoArray** branch
 
 ```javascript
 [
