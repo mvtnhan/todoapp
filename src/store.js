@@ -77,7 +77,7 @@ function reducer(state = initialState, action) {
 
     case "CLEAR_COMPLETED":
       const newTodosCompleted = Object.keys(state.todos).reduce((acc, key) => {
-        return state.todos[key].done === true
+        return state.todos[key].done
           ? acc
           : { ...acc, [key]: state.todos[key] };
       }, {});

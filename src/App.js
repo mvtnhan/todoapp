@@ -1,4 +1,3 @@
-import { connect } from "react-redux";
 import React from "react";
 import styled from "styled-components";
 
@@ -21,11 +20,7 @@ class App extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  return state;
-}
-
-export default connect(mapStateToProps)(App);
+export default App;
 
 const Wrapper = styled.div`
   background: #fff;

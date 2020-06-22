@@ -51,7 +51,7 @@ const TodoFooter = (props) => {
 };
 
 function mapStateToProps(state) {
-  return state;
+  return { todos: state.todos };
 }
 
 export default connect(mapStateToProps)(TodoFooter);

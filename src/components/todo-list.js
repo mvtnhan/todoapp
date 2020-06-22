@@ -24,7 +24,6 @@ const TodoList = (props) => {
             key={key}
             todo={todolist[key]}
             deleteTodo={(id) => {
-              console.log("id", id);
               props.dispatch({
                 type: "DELETE_TODO",
                 id,
