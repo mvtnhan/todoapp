@@ -113,16 +113,12 @@ class App extends React.Component {
   };
 
   clearCompleted = () => {
-    const { todos } = this.state;
-    const newTodos = Object.keys(todos).reduce(() => {
-      return Object.assign(
-        {},
-        Object.keys(todos)
-          .map((key) => todos[key])
-          .filter((todo) => !todo.done)
-      );
+    const newTodos = Object.keys(this.state.todos).reduce((acc, key) => {
+      return this.state.todos[key].done
+        ? acc
+        : { ...acc, [key]: this.state.todos[key] };
     }, {});
-
+    console.log("newTodos", newTodos);
     this.setState({
       todos: newTodos,
     });
