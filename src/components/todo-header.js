@@ -29,7 +29,6 @@ class TodoHeader extends React.Component {
   };
 
   render() {
-    console.log("!!", this.props.todos);
     return (
       <Header>
         <form onSubmit={this.handleSubmit}>
