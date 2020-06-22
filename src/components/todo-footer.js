@@ -1,3 +1,4 @@
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
@@ -6,12 +7,14 @@ import { capitalize } from "../util";
 import { STATUS } from "../constant";
 
 const TodoFooter = (props) => {
-  const { todos, updateStatus, clearCompleted } = props;
-  const unfinishedItemsCount = todos.filter((todo) => !todo.done).length;
+  const unfinishedItemsCount = Object.keys(props.todos).filter(
+    (key) => !props.todos[key].done
+  ).length;
   const itemText = unfinishedItemsCount > 1 ? "items" : "item";
-  const haveCompletedItem = todos.length - unfinishedItemsCount > 0;
+  const haveCompletedItem =
+    Object.keys(props.todos).length - unfinishedItemsCount > 0;
 
-  return todos.length > 0 ? (
+  return Object.keys(props.todos).length > 0 ? (
     <Footer>
       <span>{`${unfinishedItemsCount} ${itemText} left`}</span>
       <Filters>
@@ -21,7 +24,10 @@ const TodoFooter = (props) => {
               <a
                 href="#/"
                 onClick={() => {
-                  updateStatus({ status: STATUS[statusKey] });
+                  props.dispatch({
+                    type: "UPDATE_STATUS",
+                    status: STATUS[statusKey],
+                  });
                 }}
               >
                 {capitalize(STATUS[statusKey])}
@@ -33,7 +39,9 @@ const TodoFooter = (props) => {
       <button
         className="ClearCompleted"
         onClick={() => {
-          clearCompleted();
+          props.dispatch({
+            type: "CLEAR_COMPLETED",
+          });
         }}
       >
         {haveCompletedItem ? "clear completed" : ""}
@@ -42,7 +50,11 @@ const TodoFooter = (props) => {
   ) : null;
 };
 
-export default TodoFooter;
+function mapStateToProps(state) {
+  return state;
+}
+
+export default connect(mapStateToProps)(TodoFooter);
 
 TodoFooter.prototype = {
   todos: PropTypes.elementType.isRequired,
