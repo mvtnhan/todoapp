@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import React from "react";
 import styled from "styled-components";
+import * as Action from "../Action.js";
 
 class TodoHeader extends React.Component {
   state = {
@@ -17,11 +18,7 @@ class TodoHeader extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    this.props.dispatch({
-      type: "ADD_TODO",
-      content: this.state.content,
-      done: this.state.done,
-    });
+    this.props.addTodo(this.state.content, this.state.done);
 
     this.setState({
       content: "",
@@ -33,14 +30,7 @@ class TodoHeader extends React.Component {
       <Header>
         <form onSubmit={this.handleSubmit}>
           {!!Object.keys(this.props.todos).length && (
-            <ToggleAll
-              type="checkbox"
-              onChange={() => {
-                this.props.dispatch({
-                  type: "TOGGLE_ALL",
-                });
-              }}
-            />
+            <ToggleAll type="checkbox" onChange={this.props.toggleAll} />
           )}
 
           <InputNewTodo
@@ -61,7 +51,15 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(TodoHeader);
+function mapDispatchToProps(dispatch) {
+  return {
+    toggleAll: () => dispatch(Action.toggleAll()),
+
+    addTodo: (content, done) => dispatch(Action.addTodo(content, done)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoHeader);
 
 const Header = styled.div`
   input[type="checkbox"] {

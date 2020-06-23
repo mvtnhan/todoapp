@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import React from "react";
+import * as Action from "../Action.js";
 
 import { STATUS } from "../constant.js";
 import TodoItem from "./todo-item.js";
@@ -24,24 +25,13 @@ const TodoList = (props) => {
             key={key}
             todo={todolist[key]}
             deleteTodo={(id) => {
-              props.dispatch({
-                type: "DELETE_TODO",
-                id,
-              });
+              props.deleteTodo(id);
             }}
             toggleTodo={(id) => {
-              props.dispatch({
-                type: "TOGGLE_TODO",
-                id,
-              });
+              props.toggleTodo(id);
             }}
             editTodo={(id, contentEdited, done) => {
-              props.dispatch({
-                type: "EDIT_TODO",
-                id,
-                contentEdited,
-                done,
-              });
+              props.editTodo(id, contentEdited, done);
             }}
           />
         );
@@ -54,7 +44,16 @@ function mapStateToProps(state) {
   return state;
 }
 
-export default connect(mapStateToProps)(TodoList);
+function mapDispatchToProps(dispatch) {
+  return {
+    deleteTodo: (id) => dispatch(Action.deleteTodo(id)),
+    toggleTodo: (id) => dispatch(Action.toggleTodo(id)),
+    editTodo: (id, contentEdited, done) =>
+      dispatch(Action.editTodo(id, contentEdited, done)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
 
 TodoList.prototype = {
   todos: PropTypes.object.isRequired,
