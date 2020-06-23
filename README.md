@@ -2,7 +2,9 @@
 
 <p align="center"><img src="./todoapp.jpg" alt="Todo Application" /></p>
 
-### Todo data structure in **master** branch
+### Todo with object structure using Redux (todoRedux branch)
+
+### Todo data structure (master branch)
 
 ```javascript
 {
@@ -24,7 +26,7 @@
 }
 ```
 
-### Todo data structure in **todoArray** branch
+### Todo data structure (todoArray branch)
 
 ```javascript
 [
