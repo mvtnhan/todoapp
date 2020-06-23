@@ -1,4 +1,5 @@
 import { createStore } from "redux";
+import { ActionTypes } from "./Action.js";
 
 const initialState = {
   todos: {
@@ -23,7 +24,7 @@ const initialState = {
 
 function reducer(state = initialState, action) {
   switch (action.type) {
-    case "ADD_TODO":
+    case ActionTypes.ADD_TODO:
       const id = Date.now();
       const newTodos = {
         [id]: {
@@ -34,7 +35,7 @@ function reducer(state = initialState, action) {
       };
       return { ...state, todos: Object.assign({}, state.todos, newTodos) };
 
-    case "TOGGLE_ALL":
+    case ActionTypes.TOGGLE_ALL:
       const countDone = Object.keys(state.todos)
         .map((key) => state.todos[key])
         .filter((todo) => todo.done).length;
@@ -46,7 +47,7 @@ function reducer(state = initialState, action) {
       }, {});
       return { ...state, todos: newTodosToggleAll };
 
-    case "TOGGLE_TODO":
+    case ActionTypes.TOGGLE_TODO:
       return {
         ...state,
         todos: Object.assign({}, state.todos, {
@@ -57,7 +58,7 @@ function reducer(state = initialState, action) {
         }),
       };
 
-    case "DELETE_TODO":
+    case ActionTypes.DELETE_TODO:
       const newTodosDeleted = Object.keys(state.todos).reduce((acc, key) => {
         return key === action.id.toString()
           ? acc
@@ -65,7 +66,7 @@ function reducer(state = initialState, action) {
       }, {});
       return { ...state, todos: newTodosDeleted };
 
-    case "EDIT_TODO":
+    case ActionTypes.EDIT_TODO:
       const newTodosEdit = Object.assign({}, state.todos, {
         [action.id]: {
           id: action.id,
@@ -75,7 +76,7 @@ function reducer(state = initialState, action) {
       });
       return { ...state, todos: newTodosEdit };
 
-    case "CLEAR_COMPLETED":
+    case ActionTypes.CLEAR_COMPLETED:
       const newTodosCompleted = Object.keys(state.todos).reduce((acc, key) => {
         return state.todos[key].done
           ? acc
@@ -83,7 +84,7 @@ function reducer(state = initialState, action) {
       }, {});
       return { ...state, todos: newTodosCompleted };
 
-    case "UPDATE_STATUS":
+    case ActionTypes.UPDATE_STATUS:
       return { ...state, status: action.status };
 
     default:

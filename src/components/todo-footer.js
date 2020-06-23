@@ -3,8 +3,9 @@ import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
 
-import { capitalize } from "../util";
-import { STATUS } from "../constant";
+import * as Action from "../Action.js";
+import { capitalize } from "../util.js";
+import { STATUS } from "../constant.js";
 
 const TodoFooter = (props) => {
   const unfinishedItemsCount = Object.keys(props.todos).filter(
@@ -23,12 +24,7 @@ const TodoFooter = (props) => {
             <li key={statusKey}>
               <a
                 href="#/"
-                onClick={() => {
-                  props.dispatch({
-                    type: "UPDATE_STATUS",
-                    status: STATUS[statusKey],
-                  });
-                }}
+                onClick={(status) => props.updateStatus(STATUS[statusKey])}
               >
                 {capitalize(STATUS[statusKey])}
               </a>
@@ -36,14 +32,7 @@ const TodoFooter = (props) => {
           );
         })}
       </Filters>
-      <button
-        className="ClearCompleted"
-        onClick={() => {
-          props.dispatch({
-            type: "CLEAR_COMPLETED",
-          });
-        }}
-      >
+      <button className="ClearCompleted" onClick={props.clearCompleted}>
         {haveCompletedItem ? "clear completed" : ""}
       </button>
     </Footer>
@@ -54,7 +43,15 @@ function mapStateToProps(state) {
   return { todos: state.todos };
 }
 
-export default connect(mapStateToProps)(TodoFooter);
+function mapDispatchToProps(dispatch) {
+  return {
+    updateStatus: (status) => dispatch(Action.updateStatus(status)),
+
+    clearCompleted: () => dispatch(Action.clearCompleted()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoFooter);
 
 TodoFooter.prototype = {
   todos: PropTypes.elementType.isRequired,
