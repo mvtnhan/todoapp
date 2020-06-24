@@ -4,7 +4,7 @@
 
 ### Todo with object structure using Redux (todoRedux branch)
 
-### Todo data structure (master branch)
+### Todo object data structure (master branch)
 
 ```javascript
 {
@@ -26,7 +26,7 @@
 }
 ```
 
-### Todo data structure (todoArray branch)
+### Todo array data structure (todoArray branch)
 
 ```javascript
 [
