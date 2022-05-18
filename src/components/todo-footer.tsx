@@ -1,11 +1,17 @@
-import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
 
 import { capitalize } from "../util";
 import { STATUS } from "../constant";
+import { MyState, Todo } from "../App";
 
-const TodoFooter = (props) => {
+type TodoFooterProps = {
+  todos: Todo[], 
+  updateStatus: ({ status }: Pick<MyState, "status">) => void, 
+  clearCompleted: () => void,
+}
+
+const TodoFooter = (props: TodoFooterProps) => {
   const { todos, updateStatus, clearCompleted } = props;
   const unfinishedItemsCount = todos.filter((todo) => !todo.done).length;
   const itemText = unfinishedItemsCount > 1 ? "items" : "item";
@@ -43,12 +49,6 @@ const TodoFooter = (props) => {
 };
 
 export default TodoFooter;
-
-TodoFooter.prototype = {
-  todos: PropTypes.elementType.isRequired,
-  updateStatus: PropTypes.func.isRequired,
-  clearCompleted: PropTypes.func.isRequired,
-};
 
 const Footer = styled.div`
   display: flex;

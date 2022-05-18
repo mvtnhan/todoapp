@@ -3,15 +3,28 @@ import React from "react";
 import styled from "styled-components";
 
 import { STATUS } from "./constant";
-import TodoFooter from "./components/todo-footer.js";
-import TodoHeader from "./components/todo-header.js";
+import TodoFooter from "./components/todo-footer";
+import TodoHeader from "./components/todo-header";
 import TodoList from "./components/todo-list";
 
 import "./scss/reset.scss";
 import imgLoading from "./images/isLoading.gif";
 
-class App extends React.Component {
-  state = {
+export type Todo = {
+  id: number, 
+  content: string, 
+  done: boolean
+}
+
+export type MyState = {
+  todos: {[key: number]: Todo},
+  status: string,
+  isLoading: boolean,
+  error: string,
+}
+
+class App extends React.Component<{}, MyState> {
+  state: MyState = {
     todos: {
       1591513897340: {
         id: 1591513897340,
@@ -34,13 +47,18 @@ class App extends React.Component {
     error: "",
   };
 
-  addTodo = ({ todo }) => {
+  // adc(a : , b: )
+  // vv({a, b}: )
+
+// const x = {abc};
+
+  addTodo = ( {content}: Pick<Todo, "content">) => {
     const id = Date.now();
 
     const newTodos = {
       [id]: {
         id,
-        content: todo.content,
+        content: content,
         done: false,
       },
     };
@@ -52,12 +70,12 @@ class App extends React.Component {
   toggleAll = () => {
     const { todos } = this.state;
     const countDone = Object.keys(todos)
-      .map((key) => todos[key])
+      .map((key) => todos[key as unknown as number])
       .filter((todo) => todo.done).length;
 
     const doneValue = Object.keys(todos).length !== countDone;
 
-    const newTodos = Object.keys(todos).reduce((acc, key) => {
+    const newTodos = (Object.keys(todos) as unknown as number[]).reduce((acc, key) => {
       return Object.assign({}, acc, {
         [key]: { ...todos[key], done: doneValue },
       });
@@ -68,7 +86,7 @@ class App extends React.Component {
     });
   };
 
-  toggleTodo = ({ id, content, done }) => {
+  toggleTodo = ({ id, content, done }: Todo) => {
     const todoToggle = {
       id,
       content,
@@ -80,7 +98,7 @@ class App extends React.Component {
     });
   };
 
-  editTodo = ({ id, content, done }) => {
+  editTodo = ({ id, content, done }: Todo) => {
     const todoEdit = {
       id,
       content,
@@ -99,11 +117,11 @@ class App extends React.Component {
   //     return Object.assign({}, acc, { [item.id]: item });
   //   }, {});
 
-  deleteTodo = ({ id }) => {
+  deleteTodo = ({ id }: Pick<Todo, "id">) => {
     const { todos } = this.state;
     const newTodos = Object.keys(todos).reduce((acc, key) => {
       if (key === id.toString()) return acc;
-      return { ...acc, [key]: todos[key] };
+      return { ...acc, [key]: todos[key as unknown as number] };
       //return Object.assign({}, acc, { [key]: todos[key] });
     }, {});
 
@@ -114,17 +132,16 @@ class App extends React.Component {
 
   clearCompleted = () => {
     const newTodos = Object.keys(this.state.todos).reduce((acc, key) => {
-      return this.state.todos[key].done
+      return this.state.todos[key as unknown as number].done
         ? acc
-        : { ...acc, [key]: this.state.todos[key] };
+        : { ...acc, [key]: this.state.todos[key as unknown as number] };
     }, {});
-    console.log("newTodos", newTodos);
     this.setState({
       todos: newTodos,
     });
   };
 
-  updateStatus = ({ status }) => {
+  updateStatus = ({ status }: Pick<MyState, "status">) => {
     this.setState({
       status: status,
     });
@@ -132,7 +149,7 @@ class App extends React.Component {
 
   render() {
     const newTodo = Object.keys(this.state.todos).map(
-      (item) => this.state.todos[item]
+      (item) => this.state.todos[item as unknown as number]
     );
     const todoList = newTodo.filter((todo) => {
       if (this.state.status === STATUS.ACTIVE) {
@@ -152,12 +169,14 @@ class App extends React.Component {
           toggleAll={this.toggleAll}
         />
         {this.state.isLoading && <Loading src={imgLoading} alt="loading" />}
+        
         <TodoList
           todos={todoList}
           deleteTodo={this.deleteTodo}
           toggleTodo={this.toggleTodo}
           editTodo={this.editTodo}
         />
+
         <TodoFooter
           todos={newTodo}
           updateStatus={this.updateStatus}

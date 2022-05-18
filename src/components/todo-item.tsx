@@ -1,12 +1,29 @@
-import PropTypes from "prop-types";
 import React from "react";
 import styled from "styled-components";
-
+import { Todo } from "../App";
 import Checkbox from "../images/checkbox-todo.svg";
-import Checked from "../images/checkbox-todo-active.svg";
+import Checked from "../images/checkbox-todo-active.svg"; 
+import { TodoListProps, TodoListProps1 } from "./todo-list";
 
-class TodoItem extends React.Component {
-  constructor(props) {
+type MyProps1 = {
+  todo: Todo, 
+  deleteTodo: ({id}: Pick<Todo, "id">) => void, 
+  toggleTodo: (todo: Todo) => void, 
+  editTodo: (todo: Todo) => void 
+}
+
+type MyProps2 = Omit<TodoListProps, "todos"> & {todo: Todo}
+interface MyProps extends Omit<TodoListProps1, "todos"> {
+  todo: Todo,
+}
+
+type MyState = {
+  editting: boolean,
+  currenContent: string,
+}
+
+class TodoItem extends React.Component<MyProps, MyState> {
+  constructor(props: MyProps) {
     super(props);
     this.state = {
       editting: false,
@@ -86,13 +103,6 @@ class TodoItem extends React.Component {
 }
 
 export default TodoItem;
-
-TodoItem.propsTypes = {
-  todo: PropTypes.elementType.isRequired,
-  toggleTodo: PropTypes.func.isRequired,
-  editTodo: PropTypes.func.isRequired,
-  deleteTodo: PropTypes.func.isRequired,
-};
 
 const DeletedBtn = styled.button`
   display: none;

@@ -1,26 +1,37 @@
 import React from "react";
 import styled from "styled-components";
+import { Todo } from "../App";
 
-class TodoHeader extends React.Component {
-  state = {
+type MyProps = {
+  todo: Todo[],
+  addTodo: ({ content }: Pick<Todo, "content">) => void,
+  toggleAll: () => void,
+}
+
+type MyState = {
+  content: string
+  done: boolean,
+}
+
+class TodoHeader extends React.Component<MyProps, MyState > {
+  
+  state: MyState = {
     content: "",
     done: false,
   };
 
-  handleChange = (e) => {
+  handleChange = (e: React.ChangeEvent<any>) => {
     this.setState({
       content: e.target.value,
     });
   };
 
-  handleSubmit = (e) => {
+  handleSubmit = (e: React.ChangeEvent<any>) => {
     e.preventDefault();
 
     this.props.addTodo({
-      todo: {
-        content: this.state.content,
-        done: this.state.done,
-      },
+      content: this.state.content,
+      // done: this.state.done,
     });
     this.setState({
       content: "",
