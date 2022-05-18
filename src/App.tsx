@@ -1,27 +1,24 @@
-// import axios from "axios";
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
-import { STATUS } from "./constant";
-import TodoFooter from "./components/todo-footer";
-import TodoHeader from "./components/todo-header";
-import TodoList from "./components/todo-list";
-
-import "./scss/reset.scss";
-import imgLoading from "./images/isLoading.gif";
+import TodoFooter from './components/todo-footer';
+import TodoHeader from './components/todo-header';
+import TodoList from './components/todo-list';
+import { STATUS } from './constant';
+import imgLoading from './images/isLoading.gif';
 
 export type Todo = {
-  id: number, 
-  content: string, 
-  done: boolean
-}
+  id: number;
+  content: string;
+  done: boolean;
+};
 
 export type MyState = {
-  todos: {[key: number]: Todo},
-  status: string,
-  isLoading: boolean,
-  error: string,
-}
+  todos: { [key: number]: Todo };
+  status: string;
+  isLoading: boolean;
+  error: string;
+};
 
 class App extends React.Component<{}, MyState> {
   state: MyState = {
@@ -47,12 +44,7 @@ class App extends React.Component<{}, MyState> {
     error: "",
   };
 
-  // adc(a : , b: )
-  // vv({a, b}: )
-
-// const x = {abc};
-
-  addTodo = ( {content}: Pick<Todo, "content">) => {
+  addTodo = ({ content }: Pick<Todo, "content">) => {
     const id = Date.now();
 
     const newTodos = {
@@ -75,11 +67,14 @@ class App extends React.Component<{}, MyState> {
 
     const doneValue = Object.keys(todos).length !== countDone;
 
-    const newTodos = (Object.keys(todos) as unknown as number[]).reduce((acc, key) => {
-      return Object.assign({}, acc, {
-        [key]: { ...todos[key], done: doneValue },
-      });
-    }, {});
+    const newTodos = (Object.keys(todos) as unknown as number[]).reduce(
+      (acc, key) => {
+        return Object.assign({}, acc, {
+          [key]: { ...todos[key], done: doneValue },
+        });
+      },
+      {}
+    );
 
     this.setState({
       todos: newTodos,
@@ -169,7 +164,7 @@ class App extends React.Component<{}, MyState> {
           toggleAll={this.toggleAll}
         />
         {this.state.isLoading && <Loading src={imgLoading} alt="loading" />}
-        
+
         <TodoList
           todos={todoList}
           deleteTodo={this.deleteTodo}

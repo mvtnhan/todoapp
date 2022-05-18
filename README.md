@@ -1,4 +1,4 @@
-# A Todo app using ReactJS
+# A Todo app using TypeScript & ReactJS
 
 <p align="center"><img src="./todoapp.jpg" alt="Todo Application" /></p>
 

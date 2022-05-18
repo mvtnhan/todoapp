@@ -1,26 +1,19 @@
-import React from "react";
-import styled from "styled-components";
-import { Todo } from "../App";
-import Checkbox from "../images/checkbox-todo.svg";
-import Checked from "../images/checkbox-todo-active.svg"; 
-import { TodoListProps, TodoListProps1 } from "./todo-list";
+import React from 'react';
+import styled from 'styled-components';
 
-type MyProps1 = {
-  todo: Todo, 
-  deleteTodo: ({id}: Pick<Todo, "id">) => void, 
-  toggleTodo: (todo: Todo) => void, 
-  editTodo: (todo: Todo) => void 
-}
+import { Todo } from '../App';
+import Checked from '../images/checkbox-todo-active.svg';
+import Checkbox from '../images/checkbox-todo.svg';
+import { TodoListProps } from './todo-list';
 
-type MyProps2 = Omit<TodoListProps, "todos"> & {todo: Todo}
-interface MyProps extends Omit<TodoListProps1, "todos"> {
-  todo: Todo,
+interface MyProps extends Omit<TodoListProps, "todos"> {
+  todo: Todo;
 }
 
 type MyState = {
-  editting: boolean,
-  currenContent: string,
-}
+  editting: boolean;
+  currenContent: string;
+};
 
 class TodoItem extends React.Component<MyProps, MyState> {
   constructor(props: MyProps) {
