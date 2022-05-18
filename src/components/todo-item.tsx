@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { Todo } from '../App';
@@ -15,85 +15,83 @@ type MyState = {
   currenContent: string;
 };
 
-class TodoItem extends React.Component<MyProps, MyState> {
-  constructor(props: MyProps) {
-    super(props);
-    this.state = {
-      editting: false,
-      currenContent: props.todo.content,
-    };
-  }
+const TodoItem = (props: MyProps) => {
+  const { todo, toggleTodo, editTodo, deleteTodo } = props;
+  const [myState, setMyState] = useState<MyState>({
+    editting: false,
+    currenContent: props.todo.content,
+  });
 
-  toggleEditing = () => {
-    this.setState({
-      editting: !this.state.editting,
+  const toggleEditing = () => {
+    setMyState({
+      editting: !myState.editting,
+      currenContent: "",
     });
   };
 
-  render() {
-    const { todo, toggleTodo, editTodo, deleteTodo } = this.props;
-    return (
-      <Item key={todo.id}>
-        <ToggleTodo
-          type="checkbox"
-          onChange={() => {
-            toggleTodo({ id: todo.id, content: todo.content, done: todo.done });
-          }}
-          checked={todo.done}
-        />
+  return (
+    <Item key={todo.id}>
+      <ToggleTodo
+        type="checkbox"
+        onChange={() => {
+          toggleTodo({ id: todo.id, content: todo.content, done: todo.done });
+        }}
+        checked={todo.done}
+      />
 
-        <TodoContent
-          onDoubleClick={() => {
-            if (!this.state.editting) {
-              this.setState({
-                editting: true,
+      <TodoContent
+        onDoubleClick={() => {
+          if (!myState.editting) {
+            setMyState({
+              editting: true,
+              currenContent: "",
+            });
+          }
+        }}
+      >
+        {myState.editting ? (
+          <EditTodo
+            type="edit"
+            value={myState.currenContent}
+            key={todo.id}
+            onBlur={() => {
+              setMyState({
+                currenContent: todo.content,
+                editting: false,
               });
-            }
-          }}
-        >
-          {this.state.editting ? (
-            <EditTodo
-              type="edit"
-              value={this.state.currenContent}
-              key={todo.id}
-              onBlur={() => {
-                this.setState({
-                  currenContent: todo.content,
-                  editting: false,
+            }}
+            onChange={(e) => {
+              setMyState({
+                currenContent: e.target.value,
+                editting: false,
+              });
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                editTodo({
+                  id: todo.id,
+                  content: myState.currenContent,
+                  done: todo.done,
                 });
-              }}
-              onChange={(e) => {
-                this.setState({
-                  currenContent: e.target.value,
-                });
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  editTodo({
-                    id: todo.id,
-                    content: this.state.currenContent,
-                    done: todo.done,
-                  });
-                  this.toggleEditing();
-                }
-              }}
-            />
-          ) : (
-            todo.content
-          )}
-        </TodoContent>
-
-        {!this.state.editting && (
-          <DeletedBtn
-            onClick={() => {
-              deleteTodo({ id: todo.id });
+                toggleEditing();
+              }
             }}
           />
+        ) : (
+          todo.content
         )}
-      </Item>
-    );
-  }
-}
+      </TodoContent>
+
+      {!myState.editting && (
+        <DeletedBtn
+          onClick={() => {
+            deleteTodo({ id: todo.id });
+          }}
+        />
+      )}
+    </Item>
+  );
+};
 
 export default TodoItem;
 
