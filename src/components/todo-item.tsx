@@ -23,10 +23,7 @@ const TodoItem = (props: MyProps) => {
   });
 
   const toggleEditing = () => {
-    setMyState({
-      editting: !myState.editting,
-      currenContent: "",
-    });
+    setMyState({ ...myState, editting: !myState.editting });
   };
 
   return (
@@ -42,10 +39,7 @@ const TodoItem = (props: MyProps) => {
       <TodoContent
         onDoubleClick={() => {
           if (!myState.editting) {
-            setMyState({
-              editting: true,
-              currenContent: "",
-            });
+            setMyState({ ...myState, editting: true });
           }
         }}
       >
@@ -61,10 +55,7 @@ const TodoItem = (props: MyProps) => {
               });
             }}
             onChange={(e) => {
-              setMyState({
-                currenContent: e.target.value,
-                editting: false,
-              });
+              setMyState({ ...myState, currenContent: e.target.value });
             }}
             onKeyDown={(e) => {
               if (e.key === "Enter") {

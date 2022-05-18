@@ -28,10 +28,7 @@ const TodoHeader = (props: MyProps) => {
       content: myState.content,
       // done: this.state.done,
     });
-    setMyState({
-      content: "",
-      done: false,
-    });
+    setMyState({ ...myState, content: "" });
   };
 
   return (
@@ -51,7 +48,7 @@ const TodoHeader = (props: MyProps) => {
           placeholder="What needs to be done?"
           value={myState.content}
           onChange={(event) => {
-            setMyState({ content: event.target.value, done: false });
+            setMyState({ ...myState, content: event.target.value });
           }}
         />
       </form>
