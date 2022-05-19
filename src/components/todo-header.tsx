@@ -3,32 +3,23 @@ import styled from 'styled-components';
 
 import { Todo } from '../App';
 
-type MyProps = {
+type TodoHeaderProps = {
   todo: Todo[];
   addTodo: ({ content }: Pick<Todo, "content">) => void;
   toggleAll: () => void;
 };
 
-type MyState = {
-  content: string;
-  done: boolean;
-};
-
-const TodoHeader = (props: MyProps) => {
+const TodoHeader = (props: TodoHeaderProps) => {
   const { todo, addTodo, toggleAll } = props;
-  const [myState, setMyState] = useState<MyState>({
-    content: "",
-    done: false,
-  });
+  const [value, setvalue] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     addTodo({
-      content: myState.content,
-      // done: this.state.done,
+      content: value,
     });
-    setMyState({ ...myState, content: "" });
+    setvalue("");
   };
 
   return (
@@ -46,9 +37,9 @@ const TodoHeader = (props: MyProps) => {
         <InputNewTodo
           type="text"
           placeholder="What needs to be done?"
-          value={myState.content}
+          value={value}
           onChange={(event) => {
-            setMyState({ ...myState, content: event.target.value });
+            setvalue(event.target.value);
           }}
         />
       </form>

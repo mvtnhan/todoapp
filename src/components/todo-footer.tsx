@@ -1,15 +1,15 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
-import { capitalize } from "../util";
-import { STATUS } from "../constant";
-import { MyState, Todo } from "../App";
+import { MyAppState, Todo } from '../App';
+import { STATUS } from '../constant';
+import { capitalize } from '../util';
 
 type TodoFooterProps = {
-  todos: Todo[], 
-  updateStatus: ({ status }: Pick<MyState, "status">) => void, 
-  clearCompleted: () => void,
-}
+  todos: Todo[];
+  updateStatus: ({ status }: Pick<MyAppState, "status">) => void;
+  clearCompleted: () => void;
+};
 
 const TodoFooter = (props: TodoFooterProps) => {
   const { todos, updateStatus, clearCompleted } = props;

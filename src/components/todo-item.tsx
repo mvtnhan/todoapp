@@ -6,24 +6,17 @@ import Checked from '../images/checkbox-todo-active.svg';
 import Checkbox from '../images/checkbox-todo.svg';
 import { TodoListProps } from './todo-list';
 
-interface MyProps extends Omit<TodoListProps, "todos"> {
+interface TodoItemProps extends Omit<TodoListProps, "todos"> {
   todo: Todo;
 }
 
-type MyState = {
-  editting: boolean;
-  currenContent: string;
-};
-
-const TodoItem = (props: MyProps) => {
+const TodoItem = (props: TodoItemProps) => {
   const { todo, toggleTodo, editTodo, deleteTodo } = props;
-  const [myState, setMyState] = useState<MyState>({
-    editting: false,
-    currenContent: props.todo.content,
-  });
+  const [isEditing, setIsEditing] = useState(false);
+  const [value, setValue] = useState(props.todo.content);
 
   const toggleEditing = () => {
-    setMyState({ ...myState, editting: !myState.editting });
+    setIsEditing(!isEditing);
   };
 
   return (
@@ -38,30 +31,28 @@ const TodoItem = (props: MyProps) => {
 
       <TodoContent
         onDoubleClick={() => {
-          if (!myState.editting) {
-            setMyState({ ...myState, editting: true });
+          if (!isEditing) {
+            setIsEditing(true);
           }
         }}
       >
-        {myState.editting ? (
+        {isEditing ? (
           <EditTodo
             type="edit"
-            value={myState.currenContent}
+            value={value}
             key={todo.id}
             onBlur={() => {
-              setMyState({
-                currenContent: todo.content,
-                editting: false,
-              });
+              setValue(todo.content);
+              setIsEditing(false);
             }}
             onChange={(e) => {
-              setMyState({ ...myState, currenContent: e.target.value });
+              setValue(e.target.value);
             }}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 editTodo({
                   id: todo.id,
-                  content: myState.currenContent,
+                  content: value,
                   done: todo.done,
                 });
                 toggleEditing();
@@ -73,7 +64,7 @@ const TodoItem = (props: MyProps) => {
         )}
       </TodoContent>
 
-      {!myState.editting && (
+      {!isEditing && (
         <DeletedBtn
           onClick={() => {
             deleteTodo({ id: todo.id });
