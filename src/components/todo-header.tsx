@@ -1,62 +1,51 @@
-import React from "react";
-import styled from "styled-components";
-import { Todo } from "../App";
+import React, { useState } from 'react';
+import styled from 'styled-components';
 
-type MyProps = {
-  todo: Todo[],
-  addTodo: ({ content }: Pick<Todo, "content">) => void,
-  toggleAll: () => void,
-}
+import { Todo } from '../App';
 
-type MyState = {
-  content: string
-  done: boolean,
-}
+type TodoHeaderProps = {
+  todo: Todo[];
+  addTodo: ({ content }: Pick<Todo, "content">) => void;
+  toggleAll: () => void;
+};
 
-class TodoHeader extends React.Component<MyProps, MyState > {
-  
-  state: MyState = {
-    content: "",
-    done: false,
-  };
+const TodoHeader = (props: TodoHeaderProps) => {
+  const { todo, addTodo, toggleAll } = props;
+  const [value, setvalue] = useState("");
 
-  handleChange = (e: React.ChangeEvent<any>) => {
-    this.setState({
-      content: e.target.value,
-    });
-  };
-
-  handleSubmit = (e: React.ChangeEvent<any>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    this.props.addTodo({
-      content: this.state.content,
-      // done: this.state.done,
+    addTodo({
+      content: value,
     });
-    this.setState({
-      content: "",
-    });
+    setvalue("");
   };
 
-  render() {
-    return (
-      <Header>
-        <form onSubmit={this.handleSubmit}>
-          {!!this.props.todo.length && (
-            <ToggleAll type="checkbox" onChange={this.props.toggleAll} />
-          )}
-
-          <InputNewTodo
-            type="text"
-            placeholder="What needs to be done?"
-            value={this.state.content}
-            onChange={this.handleChange}
+  return (
+    <Header>
+      <form onSubmit={(e) => handleSubmit(e)}>
+        {!!todo.length && (
+          <ToggleAll
+            type="checkbox"
+            onChange={() => {
+              toggleAll();
+            }}
           />
-        </form>
-      </Header>
-    );
-  }
-}
+        )}
+
+        <InputNewTodo
+          type="text"
+          placeholder="What needs to be done?"
+          value={value}
+          onChange={(event) => {
+            setvalue(event.target.value);
+          }}
+        />
+      </form>
+    </Header>
+  );
+};
 
 export default TodoHeader;
 

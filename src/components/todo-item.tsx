@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { Todo } from '../App';
@@ -6,94 +6,74 @@ import Checked from '../images/checkbox-todo-active.svg';
 import Checkbox from '../images/checkbox-todo.svg';
 import { TodoListProps } from './todo-list';
 
-interface MyProps extends Omit<TodoListProps, "todos"> {
+interface TodoItemProps extends Omit<TodoListProps, "todos"> {
   todo: Todo;
 }
 
-type MyState = {
-  editting: boolean;
-  currenContent: string;
-};
+const TodoItem = (props: TodoItemProps) => {
+  const { todo, toggleTodo, editTodo, deleteTodo } = props;
+  const [isEditing, setIsEditing] = useState(false);
+  const [value, setValue] = useState(todo.content);
 
-class TodoItem extends React.Component<MyProps, MyState> {
-  constructor(props: MyProps) {
-    super(props);
-    this.state = {
-      editting: false,
-      currenContent: props.todo.content,
-    };
-  }
-
-  toggleEditing = () => {
-    this.setState({
-      editting: !this.state.editting,
-    });
+  const toggleEditing = () => {
+    setIsEditing(!isEditing);
   };
 
-  render() {
-    const { todo, toggleTodo, editTodo, deleteTodo } = this.props;
-    return (
-      <Item key={todo.id}>
-        <ToggleTodo
-          type="checkbox"
-          onChange={() => {
-            toggleTodo({ id: todo.id, content: todo.content, done: todo.done });
-          }}
-          checked={todo.done}
-        />
+  return (
+    <Item key={todo.id}>
+      <ToggleTodo
+        type="checkbox"
+        onChange={() => {
+          toggleTodo({ id: todo.id, content: todo.content, done: todo.done });
+        }}
+        checked={todo.done}
+      />
 
-        <TodoContent
-          onDoubleClick={() => {
-            if (!this.state.editting) {
-              this.setState({
-                editting: true,
-              });
-            }
-          }}
-        >
-          {this.state.editting ? (
-            <EditTodo
-              type="edit"
-              value={this.state.currenContent}
-              key={todo.id}
-              onBlur={() => {
-                this.setState({
-                  currenContent: todo.content,
-                  editting: false,
+      <TodoContent
+        onDoubleClick={() => {
+          if (!isEditing) {
+            setIsEditing(true);
+          }
+        }}
+      >
+        {isEditing ? (
+          <EditTodo
+            type="edit"
+            value={value}
+            key={todo.id}
+            onBlur={() => {
+              setValue(todo.content);
+              setIsEditing(false);
+            }}
+            onChange={(e) => {
+              setValue(e.target.value);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                editTodo({
+                  id: todo.id,
+                  content: value,
+                  done: todo.done,
                 });
-              }}
-              onChange={(e) => {
-                this.setState({
-                  currenContent: e.target.value,
-                });
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  editTodo({
-                    id: todo.id,
-                    content: this.state.currenContent,
-                    done: todo.done,
-                  });
-                  this.toggleEditing();
-                }
-              }}
-            />
-          ) : (
-            todo.content
-          )}
-        </TodoContent>
-
-        {!this.state.editting && (
-          <DeletedBtn
-            onClick={() => {
-              deleteTodo({ id: todo.id });
+                toggleEditing();
+              }
             }}
           />
+        ) : (
+          todo.content
         )}
-      </Item>
-    );
-  }
-}
+      </TodoContent>
+
+      {!isEditing && (
+        <DeletedBtn
+          onClick={() => {
+            deleteTodo({ id: todo.id });
+          }}
+        />
+      )}
+    </Item>
+  );
+};
 
 export default TodoItem;
 
