@@ -13,7 +13,7 @@ interface TodoItemProps extends Omit<TodoListProps, "todos"> {
 const TodoItem = (props: TodoItemProps) => {
   const { todo, toggleTodo, editTodo, deleteTodo } = props;
   const [isEditing, setIsEditing] = useState(false);
-  const [value, setValue] = useState(props.todo.content);
+  const [value, setValue] = useState(todo.content);
 
   const toggleEditing = () => {
     setIsEditing(!isEditing);
