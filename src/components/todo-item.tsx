@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import { Todo } from '../App';
 import Checked from '../images/checkbox-todo-active.svg';
 import Checkbox from '../images/checkbox-todo.svg';
-import { TodoListProps } from './todo-list';
+import { Todo, UseAppContext } from './AppContext';
 
-interface TodoItemProps extends Omit<TodoListProps, "todos"> {
+type TodoItemProps = {
   todo: Todo;
-}
+};
 
 const TodoItem = (props: TodoItemProps) => {
-  const { todo, toggleTodo, editTodo, deleteTodo } = props;
+  const { todo } = props;
+  const { toggleTodo, editTodo, deleteTodo } = UseAppContext();
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(todo.content);
 

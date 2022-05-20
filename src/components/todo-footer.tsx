@@ -1,23 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { MyAppState, Todo } from '../App';
 import { STATUS } from '../constant';
 import { capitalize } from '../util';
+import { UseAppContext } from './AppContext';
 
-type TodoFooterProps = {
-  todos: Todo[];
-  updateStatus: ({ status }: Pick<MyAppState, "status">) => void;
-  clearCompleted: () => void;
-};
+// type TodoFooterProps = {
+//   todos: Todo[];
+//   updateStatus: ({ status }: Pick<MyAppState, "status">) => void;
+//   clearCompleted: () => void;
+// };
 
-const TodoFooter = (props: TodoFooterProps) => {
-  const { todos, updateStatus, clearCompleted } = props;
-  const unfinishedItemsCount = todos.filter((todo) => !todo.done).length;
+const TodoFooter = () => {
+  const { todoNew, updateStatus, clearCompleted } = UseAppContext();
+  const unfinishedItemsCount = todoNew.filter((todo) => !todo.done).length;
   const itemText = unfinishedItemsCount > 1 ? "items" : "item";
-  const haveCompletedItem = todos.length - unfinishedItemsCount > 0;
+  const haveCompletedItem = todoNew.length - unfinishedItemsCount > 0;
 
-  return todos.length > 0 ? (
+  return todoNew.length > 0 ? (
     <Footer>
       <span>{`${unfinishedItemsCount} ${itemText} left`}</span>
       <Filters>
