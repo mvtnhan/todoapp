@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { UseAppContext } from './AppContext';
 
-const TodoHeader = () => {
+export default function Header() {
   const { todos, addTodo, toggleAll } = UseAppContext();
   const [value, setvalue] = useState("");
 
@@ -17,8 +17,8 @@ const TodoHeader = () => {
   };
 
   return (
-    <Header>
-      <form onSubmit={e => handleSubmit(e)}>
+    <Wrapper>
+      <form onSubmit={(e) => handleSubmit(e)}>
         {!!Object.keys(todos).length && (
           <ToggleAll
             type="checkbox"
@@ -32,18 +32,16 @@ const TodoHeader = () => {
           type="text"
           placeholder="What needs to be done?"
           value={value}
-          onChange={event => {
+          onChange={(event) => {
             setvalue(event.target.value);
           }}
         />
       </form>
-    </Header>
+    </Wrapper>
   );
-};
+}
 
-export default TodoHeader;
-
-const Header = styled.div`
+const Wrapper = styled.div`
   input[type="checkbox"] {
     outline: none;
   }

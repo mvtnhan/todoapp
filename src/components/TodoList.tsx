@@ -1,14 +1,12 @@
-import React from 'react';
-
 import { STATUS } from '../constant';
 import { objectKeys } from '../util';
 import { UseAppContext } from './AppContext';
-import TodoItem from './todo-item';
+import TodoItem from './TodoItem';
 
 const TodoList = () => {
   const { todos, status } = UseAppContext();
 
-  const filteredKeys = objectKeys(todos).filter(key => {
+  const filteredKeys = objectKeys(todos).filter((key) => {
     const todo = todos[key];
 
     if (status === STATUS.ACTIVE) {
@@ -22,7 +20,7 @@ const TodoList = () => {
 
   return (
     <div>
-      {filteredKeys.map(key => {
+      {filteredKeys.map((key) => {
         return <TodoItem key={todos[key].id} todo={todos[key]} />;
       })}
     </div>

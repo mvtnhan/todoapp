@@ -3,8 +3,8 @@ import styled from 'styled-components';
 
 import { AppContext, AppProvider } from './components/AppContext';
 import Footer from './components/Footer';
-import TodoHeader from './components/todo-header';
-import TodoList from './components/todo-list';
+import Header from './components/Header';
+import TodoList from './components/TodoList';
 import imgLoading from './images/isLoading.gif';
 
 const App = () => {
@@ -13,7 +13,7 @@ const App = () => {
     <AppProvider>
       <Wrapper>
         <Title>Todos</Title>
-        <TodoHeader />
+        <Header />
         {appState?.state.isLoading && (
           <Loading src={imgLoading} alt="loading" />
         )}
