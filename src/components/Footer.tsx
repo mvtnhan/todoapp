@@ -1,15 +1,12 @@
 import styled from 'styled-components';
 
 import { STATUS } from '../constant';
-import { capitalize, objectKeys } from '../util';
+import { capitalize } from '../util';
 import { UseAppContext } from './AppContext';
 
 export default function Footer() {
-  const { todos, updateFilterStatus, clearCompleted } = UseAppContext();
-
-  const unfinishedItemsCount = objectKeys(todos).filter(
-    (key) => !todos[key].done
-  ).length;
+  const { todos, updateFilterStatus, clearCompleted, status } = UseAppContext();
+  const unfinishedItemsCount = todos.filter((todo) => !todo.done).length;
   const itemText = unfinishedItemsCount > 1 ? "items" : "item";
   const haveCompletedItem =
     Object.keys(todos).length - unfinishedItemsCount > 0;
@@ -25,6 +22,11 @@ export default function Footer() {
                 href="#/"
                 onClick={() => {
                   updateFilterStatus(STATUS[statusKey]);
+                }}
+                style={{
+                  borderColor: `${
+                    status === STATUS[statusKey] ? "rgba(0,0,0,0.2)" : ""
+                  }`,
                 }}
               >
                 {capitalize(STATUS[statusKey])}
@@ -102,9 +104,6 @@ const Filters = styled.ul`
 
       &:hover {
         border: 1px solid rgba(175, 47, 47, 0.1);
-      }
-      .selected {
-        border-color: rgba(175, 47, 47, 0.2);
       }
     }
   }

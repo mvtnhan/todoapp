@@ -9,6 +9,7 @@ import imgLoading from './images/isLoading.gif';
 
 const App = () => {
   const appState = useContext(AppContext);
+
   return (
     <AppProvider>
       <Wrapper>

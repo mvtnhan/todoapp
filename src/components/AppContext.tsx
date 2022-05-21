@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
-import { objectKeys } from '../util';
+import { URL } from '../constant';
 
 export type Todo = {
   id: number;
@@ -9,7 +10,7 @@ export type Todo = {
 };
 
 export type MyAppState = {
-  todos: { [key: number]: Todo };
+  todos: Todo[];
   status: string;
   isLoading: boolean;
   error: string;
@@ -21,34 +22,33 @@ type AppContextValue = {
 };
 
 export const AppContext = React.createContext<AppContextValue | undefined>(
-  undefined,
+  undefined
 );
 
 export const AppProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => {
   const [state, setState] = useState<MyAppState>({
-    todos: {
-      1591513897340: {
-        id: 1591513897340,
-        content: "sell a keyboard",
-        done: false,
-      },
-      1591513897341: {
-        id: 1591513897341,
-        content: "buy a mouse",
-        done: false,
-      },
-      1591513897343: {
-        id: 1591513897343,
-        content: "play a new game",
-        done: true,
-      },
-    },
+    todos: [],
     status: "ALL",
     isLoading: false,
     error: "",
   });
+
+  useEffect(() => {
+    setState((s) => ({ ...s, isLoading: true }));
+    axios
+      .get(URL.TODOS)
+      .then((response) => {
+        setState((s) => ({ ...s, todos: response.data }));
+      })
+      .catch((err) => {
+        setState((s) => ({ ...s, error: err.message }));
+      })
+      .finally(() => {
+        setState((s) => ({ ...s, isLoading: false }));
+      });
+  }, []);
 
   return (
     <AppContext.Provider value={{ state, setState }}>
@@ -65,70 +65,92 @@ export const UseAppContext = () => {
   }
 
   const addTodo = ({ content }: Pick<Todo, "content">) => {
-    const id = Date.now();
-
     const newTodos = {
-      [id]: {
-        id,
-        content: content,
-        done: false,
-      },
+      id: Date.now(),
+      content: content,
+      done: false,
     };
-    setState({
-      ...state,
-      todos: Object.assign({}, state.todos, newTodos),
+    axios.post(URL.TODOS, newTodos).then(() => {
+      setState({ ...state, todos: state.todos.concat(newTodos) });
     });
   };
 
   const toggleAll = () => {
     const { todos } = state;
-    const countDone = objectKeys(todos)
-      .map(key => todos[key])
-      .filter(todo => todo.done).length;
+    const completedTodoNumber = todos.filter((todo) => todo.done).length;
+    const willSetToTrue = completedTodoNumber !== todos.length;
 
-    const doneValue = Object.keys(todos).length !== countDone;
+    const todoTobeUpdated = todos.filter(
+      (todo) => todo.done === !willSetToTrue
+    );
 
-    const newTodos = objectKeys(todos).reduce((acc, key) => {
-      return Object.assign({}, acc, {
-        [key]: { ...todos[key], done: doneValue },
+    for (let index = 0; index < todoTobeUpdated.length; index++) {
+      const todo = todoTobeUpdated[index];
+      axios.put(`${URL.TODOS}/${todo.id}`, {
+        content: todo.content,
+        done: !todo.done,
       });
-    }, {});
+    }
 
-    setState({ ...state, todos: newTodos });
-  };
-
-  const toggleTodo = (id: Todo["id"]) => {
     setState({
       ...state,
-      todos: {
-        ...state.todos,
-        [id]: { ...state.todos[id], done: !state.todos[id].done },
-      },
+      todos: todos.map((todo) => ({
+        ...todo,
+        done: willSetToTrue,
+      })),
     });
   };
 
-  const editTodo = ({ id, content }: Todo) => {
-    setState({
-      ...state,
-      todos: { ...state.todos, [id]: { ...state.todos[id], content } },
-    });
+  const toggleTodo = ({ id, content, done }: Todo) => {
+    axios
+      .put(`${URL.TODOS}/${id}`, {
+        content: content,
+        done: !done,
+      })
+      .then(() => {
+        setState({
+          ...state,
+          todos: state.todos.map((todo) => ({
+            ...todo,
+            done: todo.id === id ? !todo.done : todo.done,
+          })),
+        });
+      });
+  };
+
+  const editTodo = ({ id, content, done }: Todo) => {
+    axios
+      .put(`${URL.TODOS}/${id}`, { content: content, done: done })
+      .then(() => {
+        setState({
+          ...state,
+          todos: state.todos.map((todo) => {
+            return {
+              ...todo,
+              content: todo.id === id ? content : todo.content,
+            };
+          }),
+        });
+      });
   };
 
   const deleteTodo = (id: Todo["id"]) => {
-    const { todos } = state;
-    const newTodos = objectKeys(todos).reduce((acc, key) => {
-      if (key === id) return acc;
-      return { ...acc, [key]: todos[key] };
-    }, {});
-
-    setState({ ...state, todos: Object.assign({}, newTodos) });
+    axios.delete(`${URL.TODOS}/${id}`).then(() => {
+      setState({
+        ...state,
+        todos: state.todos.filter((todo) => todo.id !== id),
+      });
+    });
   };
 
   const clearCompleted = () => {
-    const newTodos = objectKeys(state.todos).reduce((acc, key) => {
-      return state.todos[key].done ? acc : { ...acc, [key]: state.todos[key] };
-    }, {});
-    setState({ ...state, todos: newTodos });
+    for (let index = 0; index < state.todos.length; index++) {
+      const todo = state.todos[index];
+      if (todo.done) {
+        axios.delete(`${URL.TODOS}/${todo.id}`);
+      }
+    }
+    setState({ ...state, todos: state.todos.filter((todo) => !todo.done) });
   };
 
   const updateFilterStatus = (status: MyAppState["status"]) => {

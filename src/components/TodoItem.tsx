@@ -24,14 +24,14 @@ const TodoItem = (props: TodoItemProps) => {
       <ToggleTodo
         type="checkbox"
         onChange={() => {
-          toggleTodo(todo.id);
+          toggleTodo(todo);
         }}
         checked={todo.done}
       />
 
       <TodoContent
         onDoubleClick={() => {
-          if (!isEditing) {
+          if (!isEditing && !todo.done) {
             setIsEditing(true);
           }
         }}
