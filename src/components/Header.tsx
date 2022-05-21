@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import { Todo } from '../App';
+import { UseAppContext } from './AppContext';
 
-type TodoHeaderProps = {
-  todo: Todo[];
-  addTodo: ({ content }: Pick<Todo, "content">) => void;
-  toggleAll: () => void;
-};
-
-const TodoHeader = (props: TodoHeaderProps) => {
-  const { todo, addTodo, toggleAll } = props;
+export default function Header() {
+  const { todos, addTodo, toggleAll } = UseAppContext();
   const [value, setvalue] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -23,9 +17,9 @@ const TodoHeader = (props: TodoHeaderProps) => {
   };
 
   return (
-    <Header>
+    <Wrapper>
       <form onSubmit={(e) => handleSubmit(e)}>
-        {!!todo.length && (
+        {!!Object.keys(todos).length && (
           <ToggleAll
             type="checkbox"
             onChange={() => {
@@ -43,13 +37,11 @@ const TodoHeader = (props: TodoHeaderProps) => {
           }}
         />
       </form>
-    </Header>
+    </Wrapper>
   );
-};
+}
 
-export default TodoHeader;
-
-const Header = styled.div`
+const Wrapper = styled.div`
   input[type="checkbox"] {
     outline: none;
   }
