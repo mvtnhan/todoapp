@@ -24,7 +24,7 @@ const TodoItem = (props: TodoItemProps) => {
       <ToggleTodo
         type="checkbox"
         onChange={() => {
-          toggleTodo({ id: todo.id, content: todo.content, done: todo.done });
+          toggleTodo(todo.id);
         }}
         checked={todo.done}
       />
@@ -45,10 +45,10 @@ const TodoItem = (props: TodoItemProps) => {
               setValue(todo.content);
               setIsEditing(false);
             }}
-            onChange={(e) => {
+            onChange={e => {
               setValue(e.target.value);
             }}
-            onKeyDown={(e) => {
+            onKeyDown={e => {
               if (e.key === "Enter") {
                 editTodo({
                   id: todo.id,
@@ -67,7 +67,7 @@ const TodoItem = (props: TodoItemProps) => {
       {!isEditing && (
         <DeletedBtn
           onClick={() => {
-            deleteTodo({ id: todo.id });
+            deleteTodo(todo.id);
           }}
         />
       )}
