@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { UseAppContext } from './AppContext';
 
 const TodoHeader = () => {
-  const { todoNew, addTodo, toggleAll } = UseAppContext();
+  const { todos, addTodo, toggleAll } = UseAppContext();
   const [value, setvalue] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -18,8 +18,8 @@ const TodoHeader = () => {
 
   return (
     <Header>
-      <form onSubmit={(e) => handleSubmit(e)}>
-        {!!todoNew.length && (
+      <form onSubmit={e => handleSubmit(e)}>
+        {!!Object.keys(todos).length && (
           <ToggleAll
             type="checkbox"
             onChange={() => {
@@ -32,7 +32,7 @@ const TodoHeader = () => {
           type="text"
           placeholder="What needs to be done?"
           value={value}
-          onChange={(event) => {
+          onChange={event => {
             setvalue(event.target.value);
           }}
         />

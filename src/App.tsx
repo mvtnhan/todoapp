@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import styled from 'styled-components';
 
 import { AppContext, AppProvider } from './components/AppContext';
-import TodoFooter from './components/todo-footer';
+import Footer from './components/Footer';
 import TodoHeader from './components/todo-header';
 import TodoList from './components/todo-list';
 import imgLoading from './images/isLoading.gif';
@@ -18,7 +18,7 @@ const App = () => {
           <Loading src={imgLoading} alt="loading" />
         )}
         <TodoList />
-        <TodoFooter />
+        <Footer />
       </Wrapper>
     </AppProvider>
   );

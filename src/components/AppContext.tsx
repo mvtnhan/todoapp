@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { STATUS } from '../constant';
+import { objectKeys } from '../util';
 
 export type Todo = {
   id: number;
@@ -21,7 +21,7 @@ type AppContextValue = {
 };
 
 export const AppContext = React.createContext<AppContextValue | undefined>(
-  undefined
+  undefined,
 );
 
 export const AppProvider: React.FC<React.PropsWithChildren<unknown>> = ({
@@ -82,95 +82,68 @@ export const UseAppContext = () => {
 
   const toggleAll = () => {
     const { todos } = state;
-    const countDone = Object.keys(todos)
-      .map((key) => todos[key as unknown as number])
-      .filter((todo) => todo.done).length;
+    const countDone = objectKeys(todos)
+      .map(key => todos[key])
+      .filter(todo => todo.done).length;
 
     const doneValue = Object.keys(todos).length !== countDone;
 
-    const newTodos = (Object.keys(todos) as unknown as number[]).reduce(
-      (acc, key) => {
-        return Object.assign({}, acc, {
-          [key]: { ...todos[key], done: doneValue },
-        });
-      },
-      {}
-    );
+    const newTodos = objectKeys(todos).reduce((acc, key) => {
+      return Object.assign({}, acc, {
+        [key]: { ...todos[key], done: doneValue },
+      });
+    }, {});
 
     setState({ ...state, todos: newTodos });
   };
 
-  const toggleTodo = ({ id, content, done }: Todo) => {
-    const todoToggle = {
-      id,
-      content,
-      done: !done,
-    };
-
+  const toggleTodo = (id: Todo["id"]) => {
     setState({
       ...state,
-      todos: Object.assign({}, state.todos, { [id]: todoToggle }),
+      todos: {
+        ...state.todos,
+        [id]: { ...state.todos[id], done: !state.todos[id].done },
+      },
     });
   };
 
-  const editTodo = ({ id, content, done }: Todo) => {
-    const todoEdit = {
-      id,
-      content,
-      done,
-    };
-
+  const editTodo = ({ id, content }: Todo) => {
     setState({
       ...state,
-      todos: Object.assign({}, state.todos, { [id]: todoEdit }),
+      todos: { ...state.todos, [id]: { ...state.todos[id], content } },
     });
   };
 
-  const deleteTodo = ({ id }: Pick<Todo, "id">) => {
+  const deleteTodo = (id: Todo["id"]) => {
     const { todos } = state;
-    const newTodos = Object.keys(todos).reduce((acc, key) => {
-      if (key === id.toString()) return acc;
-      return { ...acc, [key]: todos[key as unknown as number] };
-      //return Object.assign({}, acc, { [key]: todos[key] });
+    const newTodos = objectKeys(todos).reduce((acc, key) => {
+      if (key === id) return acc;
+      return { ...acc, [key]: todos[key] };
     }, {});
 
     setState({ ...state, todos: Object.assign({}, newTodos) });
   };
 
   const clearCompleted = () => {
-    const newTodos = Object.keys(state.todos).reduce((acc, key) => {
-      return state.todos[key as unknown as number].done
-        ? acc
-        : { ...acc, [key]: state.todos[key as unknown as number] };
+    const newTodos = objectKeys(state.todos).reduce((acc, key) => {
+      return state.todos[key].done ? acc : { ...acc, [key]: state.todos[key] };
     }, {});
     setState({ ...state, todos: newTodos });
   };
 
-  const updateStatus = ({ status }: Pick<MyAppState, "status">) => {
+  const updateFilterStatus = (status: MyAppState["status"]) => {
     setState({ ...state, status: status });
   };
 
-  const newTodo = Object.keys(state.todos).map(
-    (key) => state.todos[key as unknown as number]
-  );
-  const todoList = newTodo.filter((todo) => {
-    if (state.status === STATUS.ACTIVE) {
-      return !todo.done;
-    } else if (state.status === STATUS.COMPLETED) {
-      return todo.done;
-    }
-    return true;
-  });
-
   return {
+    todos: state.todos,
+    status: state.status,
     addTodo,
     toggleAll,
     toggleTodo,
     editTodo,
     deleteTodo,
     clearCompleted,
-    updateStatus,
-    todoList,
-    todoNew: newTodo,
+    updateFilterStatus,
   };
 };
