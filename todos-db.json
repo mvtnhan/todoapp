@@ -2,17 +2,17 @@
   "todos": [
     {
       "content": "sell a keyboard",
-      "done": false,
+      "done": true,
       "id": 1591513897340
     },
     {
       "content": "buy a mouse",
-      "done": false,
+      "done": true,
       "id": 1591513897341
     },
     {
       "content": "play a new game",
-      "done": false,
+      "done": true,
       "id": 1591513897343
     }
   ]

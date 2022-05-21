@@ -36,22 +36,20 @@ export const AppProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   });
 
   useEffect(() => {
-    setState({ ...state, isLoading: true });
-
+    setState((s) => ({ ...s, isLoading: true }));
     axios
       .get(URL.TODOS)
       .then((response) => {
-        setState((state.todos = response.data));
+        setState((s) => ({ ...s, todos: response.data }));
       })
       .catch((err) => {
-        setState((state.error = err.data));
+        setState((s) => ({ ...s, error: err.message }));
       })
       .finally(() => {
-        setState({ ...state, isLoading: false });
+        setState((s) => ({ ...s, isLoading: false }));
       });
   }, []);
 
-  console.log("state", state);
   return (
     <AppContext.Provider value={{ state, setState }}>
       {children}
@@ -143,14 +141,6 @@ export const UseAppContext = () => {
         todos: state.todos.filter((todo) => todo.id !== id),
       });
     });
-
-    // const { todos } = state;
-    // const newTodos = objectKeys(todos).reduce((acc, key) => {
-    //   if (key === id) return acc;
-    //   return { ...acc, [key]: todos[key] };
-    // }, {});
-
-    // setState({ ...state, todos: Object.assign({}, newTodos) });
   };
 
   const clearCompleted = () => {
@@ -166,8 +156,6 @@ export const UseAppContext = () => {
   const updateFilterStatus = (status: MyAppState["status"]) => {
     setState({ ...state, status: status });
   };
-
-  console.log("todos AppContext", state.todos);
 
   return {
     todos: state.todos,

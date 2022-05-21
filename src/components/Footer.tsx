@@ -5,7 +5,7 @@ import { capitalize } from '../util';
 import { UseAppContext } from './AppContext';
 
 export default function Footer() {
-  const { todos, updateFilterStatus, clearCompleted } = UseAppContext();
+  const { todos, updateFilterStatus, clearCompleted, status } = UseAppContext();
   const unfinishedItemsCount = todos.filter((todo) => !todo.done).length;
   const itemText = unfinishedItemsCount > 1 ? "items" : "item";
   const haveCompletedItem =
@@ -22,6 +22,11 @@ export default function Footer() {
                 href="#/"
                 onClick={() => {
                   updateFilterStatus(STATUS[statusKey]);
+                }}
+                style={{
+                  borderColor: `${
+                    status === STATUS[statusKey] ? "rgba(0,0,0,0.2)" : ""
+                  }`,
                 }}
               >
                 {capitalize(STATUS[statusKey])}
@@ -99,9 +104,6 @@ const Filters = styled.ul`
 
       &:hover {
         border: 1px solid rgba(175, 47, 47, 0.1);
-      }
-      .selected {
-        border-color: rgba(175, 47, 47, 0.2);
       }
     }
   }
