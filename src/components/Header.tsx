@@ -1,17 +1,45 @@
+import axios from 'axios';
 import React, { useState } from 'react';
+import { useMutation } from 'react-query';
 import styled from 'styled-components';
 
-import { UseAppContext } from './AppContext';
+import { Todo } from '../App';
+import { URL } from '../constant';
 
-export default function Header() {
-  const { todos, addTodo, toggleAll } = UseAppContext();
+type HeaderProps = {
+  todos: Todo[];
+};
+
+export default function Header(props: HeaderProps) {
   const [value, setvalue] = useState("");
+  const { todos } = props;
+
+  const addTodo = useMutation((newTodo: Todo) => {
+    return axios.post(URL.TODOS, newTodo);
+  });
+
+  const toggleAll = function useMutation() {
+    const completedTodoNumber = todos.filter((todo) => todo.done).length;
+    const willSetToTrue = completedTodoNumber !== todos.length;
+
+    const todoTobeUpdated = todos.filter(
+      (todo) => todo.done === !willSetToTrue
+    );
+    for (let index = 0; index < todoTobeUpdated.length; index++) {
+      const todo = todoTobeUpdated[index];
+      axios.put(`${URL.TODOS}/${todo.id}`, {
+        content: todo.content,
+        done: !todo.done,
+      });
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    addTodo({
+    addTodo.mutate({
+      id: Date.now(),
       content: value,
+      done: false,
     });
     setvalue("");
   };

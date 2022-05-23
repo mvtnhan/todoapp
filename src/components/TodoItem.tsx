@@ -1,9 +1,12 @@
+import axios from 'axios';
 import { useState } from 'react';
+import { useMutation } from 'react-query';
 import styled from 'styled-components';
 
+import { Todo } from '../App';
+import { URL } from '../constant';
 import Checked from '../images/checkbox-todo-active.svg';
 import Checkbox from '../images/checkbox-todo.svg';
-import { Todo, UseAppContext } from './AppContext';
 
 type TodoItemProps = {
   todo: Todo;
@@ -11,9 +14,23 @@ type TodoItemProps = {
 
 const TodoItem = (props: TodoItemProps) => {
   const { todo } = props;
-  const { toggleTodo, editTodo, deleteTodo } = UseAppContext();
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(todo.content);
+
+  const toggleTodo = useMutation(({ id, content, done }: Todo) => {
+    return axios.put(`${URL.TODOS}/${id}`, {
+      content: content,
+      done: !done,
+    });
+  });
+
+  const editTodo = useMutation(({ id, content, done }: Todo) => {
+    return axios.put(`${URL.TODOS}/${id}`, { content: content, done: done });
+  });
+
+  const deleteTodo = useMutation((id: Todo["id"]) => {
+    return axios.delete(`${URL.TODOS}/${id}`);
+  });
 
   const toggleEditing = () => {
     setIsEditing(!isEditing);
@@ -24,7 +41,7 @@ const TodoItem = (props: TodoItemProps) => {
       <ToggleTodo
         type="checkbox"
         onChange={() => {
-          toggleTodo(todo);
+          toggleTodo.mutate(todo);
         }}
         checked={todo.done}
       />
@@ -50,7 +67,7 @@ const TodoItem = (props: TodoItemProps) => {
             }}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                editTodo({
+                editTodo.mutate({
                   id: todo.id,
                   content: value,
                   done: todo.done,
@@ -67,7 +84,7 @@ const TodoItem = (props: TodoItemProps) => {
       {!isEditing && (
         <DeletedBtn
           onClick={() => {
-            deleteTodo(todo.id);
+            deleteTodo.mutate(todo.id);
           }}
         />
       )}
