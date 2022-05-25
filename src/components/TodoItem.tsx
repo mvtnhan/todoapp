@@ -62,10 +62,10 @@ const TodoItem = (props: TodoItemProps) => {
               setValue(todo.content);
               setIsEditing(false);
             }}
-            onChange={(e) => {
+            onChange={e => {
               setValue(e.target.value);
             }}
-            onKeyDown={(e) => {
+            onKeyDown={e => {
               if (e.key === "Enter") {
                 editTodo.mutate({
                   id: todo.id,
