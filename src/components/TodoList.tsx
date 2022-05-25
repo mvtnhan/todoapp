@@ -1,10 +1,14 @@
+import { Todo } from '../App';
 import { STATUS } from '../constant';
-import { UseAppContext } from './AppContext';
 import TodoItem from './TodoItem';
 
-const TodoList = () => {
-  const { todos, status } = UseAppContext();
+export type TodoListProps = {
+  todos: Todo[];
+  status: string;
+};
 
+const TodoList = (props: TodoListProps) => {
+  const { todos, status } = props;
   const todoList = todos.filter((todo) => {
     if (status === STATUS.ACTIVE) {
       return !todo.done;

@@ -1,11 +1,28 @@
+import axios from 'axios';
 import styled from 'styled-components';
 
-import { STATUS } from '../constant';
+import { MyAppState, Todo } from '../App';
+import { STATUS, URL } from '../constant';
 import { capitalize } from '../util';
-import { UseAppContext } from './AppContext';
 
-export default function Footer() {
-  const { todos, updateFilterStatus, clearCompleted, status } = UseAppContext();
+type TodoFooterProps = {
+  todos: Todo[];
+  status: string;
+  updateFilterStatus: ({ status }: Pick<MyAppState, "status">) => void;
+};
+
+export default function Footer(props: TodoFooterProps) {
+  const { todos, status, updateFilterStatus } = props;
+
+  const clearTodoCompleted = function useMutation() {
+    for (let index = 0; index < todos.length; index++) {
+      const todo = todos[index];
+      if (todo.done) {
+        axios.delete(`${URL.TODOS}/${todo.id}`);
+      }
+    }
+  };
+
   const unfinishedItemsCount = todos.filter((todo) => !todo.done).length;
   const itemText = unfinishedItemsCount > 1 ? "items" : "item";
   const haveCompletedItem =
@@ -21,7 +38,7 @@ export default function Footer() {
               <a
                 href="#/"
                 onClick={() => {
-                  updateFilterStatus(STATUS[statusKey]);
+                  updateFilterStatus({ status: STATUS[statusKey] });
                 }}
                 style={{
                   borderColor: `${
@@ -38,7 +55,7 @@ export default function Footer() {
       <button
         className="ClearCompleted"
         onClick={() => {
-          clearCompleted();
+          clearTodoCompleted();
         }}
       >
         {haveCompletedItem ? "clear completed" : ""}

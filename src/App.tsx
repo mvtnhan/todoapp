@@ -1,27 +1,57 @@
-import { useContext } from 'react';
+import axios from 'axios';
+import { useState } from 'react';
+import { useQuery } from 'react-query';
 import styled from 'styled-components';
 
-import { AppContext, AppProvider } from './components/AppContext';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import TodoList from './components/TodoList';
+import { URL } from './constant';
 import imgLoading from './images/isLoading.gif';
 
+export type Todo = {
+  id: number;
+  content: string;
+  done: boolean;
+};
+
+export type MyAppState = {
+  todos: Todo[];
+  status: string;
+  isLoading: boolean;
+  error: string;
+};
+
 const App = () => {
-  const appState = useContext(AppContext);
+  const [state, setState] = useState<MyAppState>({
+    todos: [],
+    status: "ALL",
+    isLoading: false,
+    error: "",
+  });
+
+  const { isLoading } = useQuery("todos", async () => {
+    const result = await axios.get(URL.TODOS);
+    setState({ ...state, todos: result.data });
+    return result.data;
+  });
+
+  const updateFilterStatus = ({ status }: Pick<MyAppState, "status">) => {
+    setState({ ...state, status: status });
+  };
 
   return (
-    <AppProvider>
-      <Wrapper>
-        <Title>Todos</Title>
-        <Header />
-        {appState?.state.isLoading && (
-          <Loading src={imgLoading} alt="loading" />
-        )}
-        <TodoList />
-        <Footer />
-      </Wrapper>
-    </AppProvider>
+    <Wrapper>
+      <Title>Todos</Title>
+      <Header todos={state.todos} />
+      {isLoading && <Loading src={imgLoading} alt="loading" />}
+      <TodoList todos={state.todos} status={state.status} />
+      <Footer
+        todos={state.todos}
+        status={state.status}
+        updateFilterStatus={updateFilterStatus}
+      />
+    </Wrapper>
   );
 };
 
