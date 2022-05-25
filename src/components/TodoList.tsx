@@ -1,14 +1,13 @@
-import { Todo } from '../App';
+import { AppState, Todo } from '../App';
 import { STATUS } from '../constant';
 import TodoItem from './TodoItem';
 
-export type TodoListProps = {
-  todos: Todo[];
-  status: string;
+export type TodoListProps = AppState & {
+  onChange?: () => void;
 };
 
 const TodoList = (props: TodoListProps) => {
-  const { todos, status } = props;
+  const { todos, status, onChange } = props;
   const todoList = todos.filter((todo) => {
     if (status === STATUS.ACTIVE) {
       return !todo.done;
@@ -21,7 +20,7 @@ const TodoList = (props: TodoListProps) => {
   return (
     <div>
       {todoList.map((todo) => {
-        return <TodoItem key={todo.id} todo={todo} />;
+        return <TodoItem key={todo.id} todo={todo} onChange={onChange} />;
       })}
     </div>
   );

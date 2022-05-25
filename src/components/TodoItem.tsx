@@ -3,92 +3,123 @@ import { useState } from 'react';
 import { useMutation } from 'react-query';
 import styled from 'styled-components';
 
-import { Todo } from '../App';
+import { Loading, Todo } from '../App';
 import { URL } from '../constant';
 import Checked from '../images/checkbox-todo-active.svg';
 import Checkbox from '../images/checkbox-todo.svg';
+import imgLoading from '../images/isLoading.gif';
+import { TodoListProps } from './TodoList';
 
 type TodoItemProps = {
   todo: Todo;
+  onChange?: () => void;
 };
 
 const TodoItem = (props: TodoItemProps) => {
-  const { todo } = props;
+  const { todo, onChange } = props;
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(todo.content);
 
-  const toggleTodo = useMutation(({ id, content, done }: Todo) => {
-    return axios.put(`${URL.TODOS}/${id}`, {
-      content: content,
-      done: !done,
-    });
-  });
+  const toggleQuery = useMutation(
+    ({ id, content, done }: Todo) => {
+      return axios.put(`${URL.TODOS}/${id}`, {
+        content: content,
+        done: !done,
+      });
+    },
+    {
+      onSuccess: () => {
+        onChange && onChange();
+      },
+    }
+  );
 
-  const editTodo = useMutation(({ id, content, done }: Todo) => {
-    return axios.put(`${URL.TODOS}/${id}`, { content: content, done: done });
-  });
+  const editQuery = useMutation(
+    ({ id, content, done }: Todo) => {
+      return axios.put(`${URL.TODOS}/${id}`, { content: content, done: done });
+    },
+    {
+      onSuccess: () => {
+        onChange && onChange();
+      },
+    }
+  );
 
-  const deleteTodo = useMutation((id: Todo["id"]) => {
-    return axios.delete(`${URL.TODOS}/${id}`);
-  });
+  const deleteQuery = useMutation(
+    (id: Todo["id"]) => {
+      return axios.delete(`${URL.TODOS}/${id}`);
+    },
+    {
+      onSuccess: () => {
+        onChange && onChange();
+      },
+    }
+  );
 
   const toggleEditing = () => {
     setIsEditing(!isEditing);
   };
 
   return (
-    <Item key={todo.id}>
-      <ToggleTodo
-        type="checkbox"
-        onChange={() => {
-          toggleTodo.mutate(todo);
-        }}
-        checked={todo.done}
-      />
+    <>
+      {editQuery.isLoading || deleteQuery.isLoading || toggleQuery.isLoading ? (
+        <Loading src={imgLoading} alt="loading" />
+      ) : editQuery.isError || deleteQuery.isError || toggleQuery.isError ? (
+        `${editQuery.error} ${deleteQuery.error} ${toggleQuery.error}`
+      ) : null}
+      <Item key={todo.id}>
+        <ToggleTodo
+          type="checkbox"
+          onChange={() => {
+            toggleQuery.mutate(todo);
+          }}
+          checked={todo.done}
+        />
 
-      <TodoContent
-        onDoubleClick={() => {
-          if (!isEditing && !todo.done) {
-            setIsEditing(true);
-          }
-        }}
-      >
-        {isEditing ? (
-          <EditTodo
-            type="edit"
-            value={value}
-            key={todo.id}
-            onBlur={() => {
-              setValue(todo.content);
-              setIsEditing(false);
-            }}
-            onChange={e => {
-              setValue(e.target.value);
-            }}
-            onKeyDown={e => {
-              if (e.key === "Enter") {
-                editTodo.mutate({
-                  id: todo.id,
-                  content: value,
-                  done: todo.done,
-                });
-                toggleEditing();
-              }
+        <TodoContent
+          onDoubleClick={() => {
+            if (!isEditing && !todo.done) {
+              setIsEditing(true);
+            }
+          }}
+        >
+          {isEditing ? (
+            <EditTodo
+              type="edit"
+              value={value}
+              key={todo.id}
+              onBlur={() => {
+                setValue(todo.content);
+                setIsEditing(false);
+              }}
+              onChange={(e) => {
+                setValue(e.target.value);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  editQuery.mutate({
+                    id: todo.id,
+                    content: value,
+                    done: todo.done,
+                  });
+                  toggleEditing();
+                }
+              }}
+            />
+          ) : (
+            todo.content
+          )}
+        </TodoContent>
+
+        {!isEditing && (
+          <DeletedBtn
+            onClick={() => {
+              deleteQuery.mutate(todo.id);
             }}
           />
-        ) : (
-          todo.content
         )}
-      </TodoContent>
-
-      {!isEditing && (
-        <DeletedBtn
-          onClick={() => {
-            deleteTodo.mutate(todo.id);
-          }}
-        />
-      )}
-    </Item>
+      </Item>
+    </>
   );
 };
 

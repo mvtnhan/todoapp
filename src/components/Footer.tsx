@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useMutation } from 'react-query';
 import styled from 'styled-components';
 
 import { AppState } from '../App';
@@ -7,10 +8,11 @@ import { capitalize } from '../util';
 
 type TodoFooterProps = AppState & {
   updateFilterStatus: (status: AppState["status"]) => void;
+  onChange?: () => void;
 };
 
 export default function Footer(props: TodoFooterProps) {
-  const { todos, status, updateFilterStatus } = props;
+  const { todos, status, updateFilterStatus, onChange } = props;
 
   const clearTodoCompleted = function useMutation() {
     for (let index = 0; index < todos.length; index++) {
@@ -19,9 +21,11 @@ export default function Footer(props: TodoFooterProps) {
         axios.delete(`${URL.TODOS}/${todo.id}`);
       }
     }
+
+    onChange && onChange();
   };
 
-  const unfinishedItemsCount = todos.filter(todo => !todo.done).length;
+  const unfinishedItemsCount = todos.filter((todo) => !todo.done).length;
   const itemText = unfinishedItemsCount > 1 ? "items" : "item";
   const haveCompletedItem =
     Object.keys(todos).length - unfinishedItemsCount > 0;
@@ -30,7 +34,7 @@ export default function Footer(props: TodoFooterProps) {
     <Wrapper>
       <span>{`${unfinishedItemsCount} ${itemText} left`}</span>
       <Filters>
-        {Object.keys(STATUS).map(statusKey => {
+        {Object.keys(STATUS).map((statusKey) => {
           return (
             <li key={statusKey}>
               <a

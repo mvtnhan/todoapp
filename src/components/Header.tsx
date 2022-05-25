@@ -3,22 +3,31 @@ import React, { useState } from 'react';
 import { useMutation } from 'react-query';
 import styled from 'styled-components';
 
-import { Todo } from '../App';
+import { Loading, Todo } from '../App';
 import { URL } from '../constant';
+import imgLoading from '../images/isLoading.gif';
 
 type HeaderProps = {
   todos: Todo[];
+  onChange?: () => void;
 };
 
 export default function Header(props: HeaderProps) {
   const [value, setvalue] = useState("");
-  const { todos } = props;
+  const { todos, onChange } = props;
 
-  const addTodo = useMutation((newTodo: Todo) => {
-    return axios.post(URL.TODOS, newTodo);
-  });
+  const addQuery = useMutation(
+    (newTodo: Todo) => {
+      return axios.post(URL.TODOS, newTodo);
+    },
+    {
+      onSuccess: () => {
+        onChange && onChange();
+      },
+    }
+  );
 
-  const toggleAll = function useMutation() {
+  const toggleAll = () => {
     const completedTodoNumber = todos.filter((todo) => todo.done).length;
     const willSetToTrue = completedTodoNumber !== todos.length;
 
@@ -32,20 +41,27 @@ export default function Header(props: HeaderProps) {
         done: !todo.done,
       });
     }
+    onChange && onChange();
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    addTodo.mutate({
+    addQuery.mutate({
       id: Date.now(),
       content: value,
       done: false,
     });
+
     setvalue("");
   };
 
   return (
     <Wrapper>
+      {addQuery.isLoading ? (
+        <Loading src={imgLoading} alt="loading" />
+      ) : addQuery.isError ? (
+        `${addQuery.error}`
+      ) : null}
       <form onSubmit={(e) => handleSubmit(e)}>
         {!!Object.keys(todos).length && (
           <ToggleAll
