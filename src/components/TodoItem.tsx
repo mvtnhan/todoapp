@@ -8,30 +8,53 @@ import { URL } from '../constant';
 import Checked from '../images/checkbox-todo-active.svg';
 import Checkbox from '../images/checkbox-todo.svg';
 import imgLoading from '../images/isLoading.gif';
+import { TodoListProps } from './TodoList';
 
 type TodoItemProps = {
   todo: Todo;
+  onChange?: () => void;
 };
 
 const TodoItem = (props: TodoItemProps) => {
-  const { todo } = props;
+  const { todo, onChange } = props;
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(todo.content);
 
-  const toggleQuery = useMutation(({ id, content, done }: Todo) => {
-    return axios.put(`${URL.TODOS}/${id}`, {
-      content: content,
-      done: !done,
-    });
-  });
+  const toggleQuery = useMutation(
+    ({ id, content, done }: Todo) => {
+      return axios.put(`${URL.TODOS}/${id}`, {
+        content: content,
+        done: !done,
+      });
+    },
+    {
+      onSuccess: () => {
+        onChange && onChange();
+      },
+    }
+  );
 
-  const editQuery = useMutation(({ id, content, done }: Todo) => {
-    return axios.put(`${URL.TODOS}/${id}`, { content: content, done: done });
-  });
+  const editQuery = useMutation(
+    ({ id, content, done }: Todo) => {
+      return axios.put(`${URL.TODOS}/${id}`, { content: content, done: done });
+    },
+    {
+      onSuccess: () => {
+        onChange && onChange();
+      },
+    }
+  );
 
-  const deleteQuery = useMutation((id: Todo["id"]) => {
-    return axios.delete(`${URL.TODOS}/${id}`);
-  });
+  const deleteQuery = useMutation(
+    (id: Todo["id"]) => {
+      return axios.delete(`${URL.TODOS}/${id}`);
+    },
+    {
+      onSuccess: () => {
+        onChange && onChange();
+      },
+    }
+  );
 
   const toggleEditing = () => {
     setIsEditing(!isEditing);

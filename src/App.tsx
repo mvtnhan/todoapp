@@ -30,6 +30,7 @@ const App = () => {
     data: todos = [],
     isError,
     error,
+    refetch,
   } = useQuery<Todo[]>("todos", () =>
     axios.get(URL.TODOS).then((result) => result.data)
   );
@@ -37,11 +38,16 @@ const App = () => {
   return (
     <Wrapper>
       <Title>Todos</Title>
-      <Header todos={todos} />
+      <Header todos={todos} onChange={refetch} />
       {isLoading && <Loading src={imgLoading} alt="loading" />}
       {isError && `${error}`}
-      <TodoList todos={todos} status={status} />
-      <Footer todos={todos} status={status} updateFilterStatus={setStatus} />
+      <TodoList todos={todos} status={status} onChange={refetch} />
+      <Footer
+        todos={todos}
+        status={status}
+        onChange={refetch}
+        updateFilterStatus={setStatus}
+      />
     </Wrapper>
   );
 };
