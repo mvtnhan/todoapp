@@ -15,42 +15,27 @@ export type Todo = {
   done: boolean;
 };
 
-export type MyAppState = {
+type Status = "ALL" | "ACTIVE" | "COMPLETED";
+
+export type AppState = {
   todos: Todo[];
-  status: string;
-  isLoading: boolean;
-  error: string;
+  status: Status;
 };
 
 const App = () => {
-  const [state, setState] = useState<MyAppState>({
-    todos: [],
-    status: "ALL",
-    isLoading: false,
-    error: "",
-  });
+  const [status, setStatus] = useState<Status>("ALL");
 
-  const { isLoading } = useQuery("todos", async () => {
-    const result = await axios.get(URL.TODOS);
-    setState({ ...state, todos: result.data });
-    return result.data;
-  });
-
-  const updateFilterStatus = ({ status }: Pick<MyAppState, "status">) => {
-    setState({ ...state, status: status });
-  };
+  const { isLoading, data: todos = [] } = useQuery<Todo[]>("todos", () =>
+    axios.get(URL.TODOS).then(result => result.data),
+  );
 
   return (
     <Wrapper>
       <Title>Todos</Title>
-      <Header todos={state.todos} />
+      <Header todos={todos} />
       {isLoading && <Loading src={imgLoading} alt="loading" />}
-      <TodoList todos={state.todos} status={state.status} />
-      <Footer
-        todos={state.todos}
-        status={state.status}
-        updateFilterStatus={updateFilterStatus}
-      />
+      <TodoList todos={todos} status={status} />
+      <Footer todos={todos} status={status} updateFilterStatus={setStatus} />
     </Wrapper>
   );
 };
