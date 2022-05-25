@@ -38,11 +38,8 @@ const App = () => {
     <Wrapper>
       <Title>Todos</Title>
       <Header todos={todos} />
-      {isLoading ? (
-        <Loading src={imgLoading} alt="loading" />
-      ) : isError ? (
-        `${error}`
-      ) : null}
+      {isLoading && <Loading src={imgLoading} alt="loading" />}
+      {isError && `${error}`}
       <TodoList todos={todos} status={status} />
       <Footer todos={todos} status={status} updateFilterStatus={setStatus} />
     </Wrapper>

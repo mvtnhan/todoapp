@@ -18,33 +18,18 @@ const TodoItem = (props: TodoItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(todo.content);
 
-  const {
-    mutate: toggleTodo,
-    isLoading: toggleLoading,
-    isError: toggleIsError,
-    error: toggleError,
-  } = useMutation(({ id, content, done }: Todo) => {
+  const toggleQuery = useMutation(({ id, content, done }: Todo) => {
     return axios.put(`${URL.TODOS}/${id}`, {
       content: content,
       done: !done,
     });
   });
 
-  const {
-    mutate: editTodo,
-    isLoading: editLoading,
-    isError: editIsError,
-    error: editError,
-  } = useMutation(({ id, content, done }: Todo) => {
+  const editQuery = useMutation(({ id, content, done }: Todo) => {
     return axios.put(`${URL.TODOS}/${id}`, { content: content, done: done });
   });
 
-  const {
-    mutate: deleteTodo,
-    isLoading: deleteLoading,
-    isError: deleteIsError,
-    error: deleteError,
-  } = useMutation((id: Todo["id"]) => {
+  const deleteQuery = useMutation((id: Todo["id"]) => {
     return axios.delete(`${URL.TODOS}/${id}`);
   });
 
@@ -54,16 +39,16 @@ const TodoItem = (props: TodoItemProps) => {
 
   return (
     <>
-      {editLoading || deleteLoading || toggleLoading ? (
+      {editQuery.isLoading || deleteQuery.isLoading || toggleQuery.isLoading ? (
         <Loading src={imgLoading} alt="loading" />
-      ) : editIsError || deleteIsError || toggleIsError ? (
-        `${editError} ${deleteError} ${toggleError}`
+      ) : editQuery.isError || deleteQuery.isError || toggleQuery.isError ? (
+        `${editQuery.error} ${deleteQuery.error} ${toggleQuery.error}`
       ) : null}
       <Item key={todo.id}>
         <ToggleTodo
           type="checkbox"
           onChange={() => {
-            toggleTodo(todo);
+            toggleQuery.mutate(todo);
           }}
           checked={todo.done}
         />
@@ -89,7 +74,7 @@ const TodoItem = (props: TodoItemProps) => {
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  editTodo({
+                  editQuery.mutate({
                     id: todo.id,
                     content: value,
                     done: todo.done,
@@ -106,7 +91,7 @@ const TodoItem = (props: TodoItemProps) => {
         {!isEditing && (
           <DeletedBtn
             onClick={() => {
-              deleteTodo(todo.id);
+              deleteQuery.mutate(todo.id);
             }}
           />
         )}
