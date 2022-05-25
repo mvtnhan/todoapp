@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { useMutation } from 'react-query';
 import styled from 'styled-components';
 
-import { AppState } from '../App';
+import { AppState, Todo } from '../App';
 import { STATUS, URL } from '../constant';
 import { capitalize } from '../util';
 
@@ -21,7 +22,7 @@ export default function Footer(props: TodoFooterProps) {
     }
   };
 
-  const unfinishedItemsCount = todos.filter(todo => !todo.done).length;
+  const unfinishedItemsCount = todos.filter((todo) => !todo.done).length;
   const itemText = unfinishedItemsCount > 1 ? "items" : "item";
   const haveCompletedItem =
     Object.keys(todos).length - unfinishedItemsCount > 0;
@@ -30,7 +31,7 @@ export default function Footer(props: TodoFooterProps) {
     <Wrapper>
       <span>{`${unfinishedItemsCount} ${itemText} left`}</span>
       <Filters>
-        {Object.keys(STATUS).map(statusKey => {
+        {Object.keys(STATUS).map((statusKey) => {
           return (
             <li key={statusKey}>
               <a

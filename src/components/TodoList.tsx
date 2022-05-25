@@ -1,13 +1,8 @@
-import { Todo } from '../App';
+import { AppState, Todo } from '../App';
 import { STATUS } from '../constant';
 import TodoItem from './TodoItem';
 
-export type TodoListProps = {
-  todos: Todo[];
-  status: string;
-};
-
-const TodoList = (props: TodoListProps) => {
+const TodoList = (props: AppState) => {
   const { todos, status } = props;
   const todoList = todos.filter((todo) => {
     if (status === STATUS.ACTIVE) {

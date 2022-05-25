@@ -25,15 +25,24 @@ export type AppState = {
 const App = () => {
   const [status, setStatus] = useState<Status>("ALL");
 
-  const { isLoading, data: todos = [] } = useQuery<Todo[]>("todos", () =>
-    axios.get(URL.TODOS).then(result => result.data),
+  const {
+    isLoading,
+    data: todos = [],
+    isError,
+    error,
+  } = useQuery<Todo[]>("todos", () =>
+    axios.get(URL.TODOS).then((result) => result.data)
   );
 
   return (
     <Wrapper>
       <Title>Todos</Title>
       <Header todos={todos} />
-      {isLoading && <Loading src={imgLoading} alt="loading" />}
+      {isLoading ? (
+        <Loading src={imgLoading} alt="loading" />
+      ) : isError ? (
+        `${error}`
+      ) : null}
       <TodoList todos={todos} status={status} />
       <Footer todos={todos} status={status} updateFilterStatus={setStatus} />
     </Wrapper>
@@ -49,7 +58,7 @@ const Wrapper = styled.div`
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
 `;
 
-const Loading = styled.img`
+export const Loading = styled.img`
   display: flex;
   margin-left: auto;
   margin-right: auto;

@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { useMutation } from 'react-query';
 import styled from 'styled-components';
 
-import { Todo } from '../App';
+import { Loading, Todo } from '../App';
 import { URL } from '../constant';
+import imgLoading from '../images/isLoading.gif';
 
 type HeaderProps = {
   todos: Todo[];
@@ -14,7 +15,12 @@ export default function Header(props: HeaderProps) {
   const [value, setvalue] = useState("");
   const { todos } = props;
 
-  const addTodo = useMutation((newTodo: Todo) => {
+  const {
+    mutate: addTodo,
+    isLoading: addTodoLoading,
+    isError: addTodoIsError,
+    error: addTodoError,
+  } = useMutation((newTodo: Todo) => {
     return axios.post(URL.TODOS, newTodo);
   });
 
@@ -36,7 +42,7 @@ export default function Header(props: HeaderProps) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    addTodo.mutate({
+    addTodo({
       id: Date.now(),
       content: value,
       done: false,
@@ -46,6 +52,11 @@ export default function Header(props: HeaderProps) {
 
   return (
     <Wrapper>
+      {addTodoLoading ? (
+        <Loading src={imgLoading} alt="loading" />
+      ) : addTodoIsError ? (
+        `${addTodoError}`
+      ) : null}
       <form onSubmit={(e) => handleSubmit(e)}>
         {!!Object.keys(todos).length && (
           <ToggleAll
